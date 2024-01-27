@@ -1,11 +1,19 @@
 import React from 'react';
 import './input.css';
+import Navbar from './components/in/Navbar';
+import { Route, Routes } from 'react-router-dom';
+import Landing from './components/in/Landing';
+import About from './components/in/About';
 
 function App() {
   return (
-    <>
-     <p className='text-2xl flex justify-center items-center h-screen'>Hello {process.env.REACT_APP_BRANDNAME}</p> 
-    </>
+    <div className='flex flex-col justify-center items-center dark:bg-primary-background-dark'>
+      <Navbar />
+      <Routes>
+        <Route path='/' element={<Landing />} />
+        <Route path='/about' element={<About />} />
+      </Routes>
+    </div>
   );
 }
 
