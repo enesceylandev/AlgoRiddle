@@ -2,7 +2,7 @@ import React from 'react'
 import Glow from '../../assets/Glow'
 import { Link } from 'react-router-dom'
 
-const Header = () => {
+const Header: React.FC = () => {
   return (
     <div className='flex flex-col space-y-6 justify-end items-center h-[500px] w-full sm:max-w-[800px] text-center transition-all z-0'>
       <h1 className='sm:text-5xl text-2xl font-extrabold text-slate-900 dark:text-slate-100 z-20'>The fun and effective way to learn algorithms!</h1>

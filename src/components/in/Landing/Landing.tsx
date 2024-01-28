@@ -3,7 +3,7 @@ import Header from './Header'
 import Showcase from './Showcase'
 import Features from './Features'
 
-const Landing = () => {
+const Landing: React.FC = () => {
   return (
     <div className='space-y-24 mx-6 flex flex-col items-center justify-center'>
         <Header/>

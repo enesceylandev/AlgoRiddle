@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faSun } from '@fortawesome/free-solid-svg-icons'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import { Link } from 'react-router-dom'
-const Navbar = () => {
+const Navbar: React.FC = () => {
   const [menu, setMenu] = useState<boolean>(false)
   const [isTop, setIsTop] = useState<boolean>(true)
   
