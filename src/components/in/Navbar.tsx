@@ -37,10 +37,10 @@ const Navbar = () => {
     }
   })
   return (
-    <div className='fixed top-0 w-full z-20'>
+    <div className='fixed top-0 w-full z-50'>
     <div 
       className={`w-full flex items-center justify-center z-30 transition-all duration-500
-      ${(!isTop && !menu) && 'bg-white dark:bg-primary-background-dark bg-opacity-25 dark:bg-opacity-25 backdrop-blur-sm shadow-md'}
+      ${(!isTop && !menu) && 'bg-white dark:bg-primary-background-dark bg-opacity-55 dark:bg-opacity-25 backdrop-blur-sm shadow-md'}
      dark:text-gray-200 text-gray-600`}
      >
       <div className='flex justify-between items-center p-2 w-full sm:max-w-[1024px]'>
