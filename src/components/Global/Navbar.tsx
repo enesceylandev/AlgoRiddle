@@ -10,11 +10,11 @@ const Navbar: React.FC = () => {
   // Theme
   const [theme, setTheme] = useState<string | null>("light")
 
-  // useEffect(()=> {
-  //   if(window.matchMedia('(prefers-color-scheme: dark)').matches) {
-  //     setTheme('dark')
-  //   }
-  // }, [])
+  useEffect(()=> {
+    if(window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setTheme('dark')
+    }
+  }, [])
   useEffect(() => {
     if (theme === 'dark') {
       document.documentElement.classList.add('dark')

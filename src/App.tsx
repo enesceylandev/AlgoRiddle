@@ -1,10 +1,11 @@
 import React from 'react';
 import './input.css';
-import Navbar from './components/in/Navbar';
+import Navbar from './components/Global/Navbar';
 import { Route, Routes, useLocation } from 'react-router-dom';
-import Landing from './components/in/Landing/Landing';
-import About from './components/in/About/About';
-import Footer from './components/in/Footer';
+import Landing from './components/out/Landing/Landing';
+import About from './components/out/About/About';
+import Footer from './components/Global/Footer';
+import Play from './components/in/play';
 
 function App() {
   const location = useLocation();
@@ -25,6 +26,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Landing />} />
         <Route path='/about' element={<About />} />
+        <Route path='/play' element={<Play/>} />
       </Routes>
       <Footer/>
     </div>
