@@ -12,7 +12,7 @@ const Controls: React.FC<Props> = ({ selected, notation, setNotation }) => {
   const updateSelectedNotation = (newValue: string) => {
     if (selected !== null) {
         let selectedLayer = notation[selected[1]-1] || [];
-
+        
         const layerLength = selectedLayer.length;
         const missingSlots = selected[0] - layerLength + 1;
 
@@ -20,8 +20,15 @@ const Controls: React.FC<Props> = ({ selected, notation, setNotation }) => {
         selectedLayer = selectedLayer.concat(new Array(missingSlots).fill(undefined));
         }
 
-        selectedLayer[selected[0]] = newValue;
+        let condution = null
+        if (selectedLayer[selected[0]] === "red" || selectedLayer[selected[0]] === "purple" || selectedLayer[selected[0]] === "blue"){
+            condution = selectedLayer[selected[0]]
+        }
 
+        if(condution !== null && (newValue !== "red" && newValue !== "purple" && newValue !== "blue")){
+            newValue = condution + "-" + newValue
+        }
+        selectedLayer[selected[0]] = newValue;
         setNotation((prev) => {
         const updatedTest = [...prev];
         updatedTest[selected[1]-1] = selectedLayer;
@@ -55,13 +62,13 @@ const Controls: React.FC<Props> = ({ selected, notation, setNotation }) => {
             f2
           </button>
         </div>
-        
+
         <div className='grid grid-cols-1'>
           <button onClick={() => updateSelectedNotation('red')} className='dark:border-slate-800 border rounded-t-md p-1 w-9 h-9'>
             <div className='bg-red-500 w-full h-full rounded-md' />
           </button>
-          <button onClick={() => updateSelectedNotation('green')} className='dark:border-slate-800 border-x p-1 w-9 h-9'>
-            <div className='bg-green-500 w-full h-full rounded-md' />
+          <button onClick={() => updateSelectedNotation('purple')} className='dark:border-slate-800 border-x p-1 w-9 h-9'>
+            <div className='bg-purple-500 w-full h-full rounded-md' />
           </button>
           <button onClick={() => updateSelectedNotation('blue')} className='dark:border-slate-800 border rounded-b-md p-1 w-9 h-9'>
             <div className='bg-blue-500 w-full h-full rounded-md' />

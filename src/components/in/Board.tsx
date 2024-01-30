@@ -70,7 +70,7 @@ const Play: React.FC = () => {
                 };
 
                 row.push(
-                    <div key={`${x},${y}`} className='flex items-center justify-center' style={style} onClick={() => setValid(isValid(x,y))}>
+                    <div key={`${x},${y}`} className='flex items-center justify-center text-slate-100 dark:text-slate-100' style={style} onClick={() => setValid(isValid(x,y))}>
                         {arrowIcon()}
                     </div>
                 );
@@ -83,7 +83,7 @@ const Play: React.FC = () => {
     };
 
     return (
-        <div className='flex flex-col justify-center items-center h-screen text-slate-700 dark:text-slate-300'>
+        <div className='flex flex-col justify-center items-center h-screen text-slate-700 dark:text-slate-300 z-20'>
             {valid ? <div>Valid</div> : <div>Not Valid</div>}
             <div className="grid-container">{renderGrid()}</div>
         </div>
