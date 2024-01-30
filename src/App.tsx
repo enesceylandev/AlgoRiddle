@@ -5,7 +5,7 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import Landing from './components/out/Landing/Landing';
 import About from './components/out/About/About';
 import Footer from './components/Global/Footer';
-import Play from './components/in/play';
+import Play from './components/in/Play';
 
 function App() {
   const location = useLocation();
