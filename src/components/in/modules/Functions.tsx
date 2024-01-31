@@ -29,6 +29,7 @@ const Functions: React.FC<Props> = ({selected, setSelected, notation}) => {
             const buttonClassName = `${(selected && selected[0] === i) && (selected && selected[1] === layer) && 'bg-slate-100 dark:bg-slate-800'}
              dark:border-slate-800 border-r border-y flex items-center justify-center text-sm ${isLastButton ? 'rounded-r-md' : 'rounded-y-md'}`;
             buttons.push(
+                
                 <button
                     key={i}
                     className={buttonClassName}
@@ -40,18 +41,19 @@ const Functions: React.FC<Props> = ({selected, setSelected, notation}) => {
                 >
                     {/* Showing icon/color/function number */}
                     
+                    
                     {/* left/right/forward */}
                     {notation[layer - 1] && notation[layer - 1][i] && (notation[layer -1][i] === "left" || notation[layer - 1][i] === "right" || notation[layer - 1][i] === "forward") ? (
                         <FontAwesomeIcon icon={whichIcon(notation[layer - 1][i])} />    
 
                     // red/purple/blue 
                     ) : (notation[layer - 1] && notation[layer - 1][i] && (notation[layer - 1][i] === "red" || notation[layer - 1][i] === "purple" || notation[layer - 1][i] === "blue")) ? (
-                        <div className={`bg-${notation[layer - 1][i]}-500 p-3 rounded-md`} /> // ${isLastButton ? 'rounded-r-md' : 'rounded-md'}
+                        <div className={`bg-${notation[layer - 1][i]}-500 p-3 rounded-md`} />
 
                     // mixed color(condution + color/functionNumber)
                     ) : (notation[layer -1] && notation[layer - 1][i] && (notation[layer - 1][i].includes("-"))) ? (
                         <div className={`bg-${notation[layer - 1][i].split("-")[0]}-500 w-6 h-6 rounded-md text-center`}>
-                            {notation[layer - 1][i].split("-")[1].includes("f") && !notation[layer - 1][i].split("-")[1].includes("for") ? (
+                            {notation[layer - 1][i].split("-")[1].includes("f") && !notation[layer - 1][i].split("-")[1].includes("for") && !notation[layer - 1][i].split("-")[1].includes("left") ? (
                                 <p className='mt-0.5 dark:text-slate-300 text-slate-900'>{notation[layer - 1][i].split("-")[1]}</p>
                             ) : (
                                 <FontAwesomeIcon icon={whichIcon(notation[layer - 1][i].split("-")[1])} className='p-1'/>

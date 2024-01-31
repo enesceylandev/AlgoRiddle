@@ -15,10 +15,10 @@ const OurTeam: React.FC = () => {
                 <a href="https://enesceylan.dev/" target="_blank" rel="noreferrer" className='p-2 rounded-md dark:hover:bg-slate-800 hover:bg-gray-200'>
                   <FontAwesomeIcon icon={faAddressCard}/>
                 </a>
-                <a href="https://enesceylan.dev/" target="_blank" rel="noreferrer" className='p-2 rounded-md dark:hover:bg-slate-800 hover:bg-gray-200'>
+                <a href="https://www.linkedin.com/in/eness-ceylan/" target="_blank" rel="noreferrer" className='p-2 rounded-md dark:hover:bg-slate-800 hover:bg-gray-200'>
                   <FontAwesomeIcon icon={faLinkedin}/>
                 </a>
-                <a href="https://enesceylan.dev/" target="_blank" rel="noreferrer" className='p-2 rounded-md dark:hover:bg-slate-800 hover:bg-gray-200'>
+                <a href="https://github.com/MedusaCollins" target="_blank" rel="noreferrer" className='p-2 rounded-md dark:hover:bg-slate-800 hover:bg-gray-200'>
                   <FontAwesomeIcon icon={faGithub}/>
                 </a>
             </div> 

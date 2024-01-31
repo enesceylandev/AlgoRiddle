@@ -21,7 +21,7 @@ const Play: React.FC = () => {
           <Commands selected={selected} notation={notation} setNotation={setNotation}/>
         </div>
         <Board/>
-        {/* <NotationList notation={notation}/> */}
+        <NotationList notation={notation}/>
     </div>
   )
 }
