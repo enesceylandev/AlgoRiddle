@@ -1,11 +1,13 @@
 import { faPlay, faReply, faRotateRight, faShare, faStop, faUpLong } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useState, useRef } from 'react';
+import React from 'react';
 
 type Props = {
     notation: string[][];
     list: string[];
     setList: React.Dispatch<React.SetStateAction<string[]>>;
+    iterationRef: React.MutableRefObject<number>;
+    player: { cords: number[], direction: string | undefined };
 };
 
 const whichIcon = (direction: string) => {
@@ -21,14 +23,12 @@ const whichIcon = (direction: string) => {
     };
 };
 
-const NotationList: React.FC<Props> = ({ notation, list, setList }) => {
-    const iterationRef = useRef<number>(0);
-    
+const NotationList: React.FC<Props> = ({ notation, list, setList, iterationRef }) => {
 
+    
     const ReadNotation = (i: number) => {
         const notationArray = notation[i];
         let index = 0;
-        
         processItem(index, notationArray, iterationRef.current);
     };
 
@@ -37,11 +37,10 @@ const NotationList: React.FC<Props> = ({ notation, list, setList }) => {
             const item = notationArray[index];
             
             if (item) {
-                if (item.includes("f") && !item.includes("for") && !item.includes("left")) {
+                setList((prevList) => [...prevList, item])
+                if (item.includes("f") && !item.includes("forward") && !item.includes("left")) {
                     iterationRef.current += 1; // Her "f" öğesi için yeni bir iterasyon numarası
                     ReadNotation(parseInt(item.split("f")[1]));
-                } else {
-                    setList((prevList) => [...prevList, item]);
                 }
             }
 
@@ -87,7 +86,7 @@ const NotationList: React.FC<Props> = ({ notation, list, setList }) => {
                             <div className='flex justify-end items-center pl-1'>
                                 {item === "left" || item === "right" || item === "forward" ?
                                 <FontAwesomeIcon icon={whichIcon(item)} className='p-2.5'/> : 
-                                (item.split("-")[1] ?                              
+                                (!!item.split("-")[1] && !item.split("-")[1].includes("0" || "1" || "2")) ?                              
                                     <div className='p-0.5 w-7 h-7'>
                                     <div className={`bg-${item.split("-")[0]}-500 w-full h-full rounded-md flex items-center justify-center`}>
                                         <FontAwesomeIcon icon={whichIcon(item.split("-")[1])} />
@@ -95,9 +94,11 @@ const NotationList: React.FC<Props> = ({ notation, list, setList }) => {
                                     </div>
                                 :
                                     <div className='p-0.5 w-7 h-7'>
-                                    <div className={`bg-${item.split("-")[0]}-500 w-full h-full rounded-md flex items-center justify-center`}/>
+                                        <div className={`bg-${item.split("-")[0]}-500 w-full h-full rounded-md flex items-center justify-center`}>
+                                            {!!item.split("-")[1] && !!item.split("-")[1].includes("0" || "1" || "2") ? item.split("-")[1] : null}
+                                        </div>
                                     </div>
-                                )}
+                                }
                             </div>
                         </li>
                     ))}

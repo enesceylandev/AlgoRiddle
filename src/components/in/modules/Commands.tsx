@@ -1,11 +1,24 @@
-import { faReply, faShare, faUpLong } from '@fortawesome/free-solid-svg-icons';
+import { faBan, faReply, faShare, faUpLong } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import React from 'react';
+import { playground } from '../maps';
 
 type Props = {
   selected: number[] | null;
   notation: string[][];
   setNotation: React.Dispatch<React.SetStateAction<string[][]>>
+};
+type ControlButtonProps = {
+  onClick: () => void;
+  text?: string;
+  active: boolean;
+  icon?: IconDefinition;
+};
+type ColorButtonProps = {
+  key: number;
+  onClick: (color: string) => void;
+  color: string;
 };
 
 const Controls: React.FC<Props> = ({ selected, notation, setNotation }) => {
@@ -21,11 +34,11 @@ const Controls: React.FC<Props> = ({ selected, notation, setNotation }) => {
         }
 
         let condution = null
-        if (selectedLayer[selected[0]] === "red" || selectedLayer[selected[0]] === "purple" || selectedLayer[selected[0]] === "blue"){
+        if (playground[0].ruleset.color.includes(selectedLayer[selected[0]])){
             condution = selectedLayer[selected[0]]
         }
 
-        if(condution !== null && (newValue !== "red" && newValue !== "purple" && newValue !== "blue")){
+        if(condution !== null && (playground[0].ruleset.color.includes(selectedLayer[selected[0]]))){
             newValue = condution + "-" + newValue
         }
         selectedLayer[selected[0]] = newValue;
@@ -37,42 +50,80 @@ const Controls: React.FC<Props> = ({ selected, notation, setNotation }) => {
     }
   };
 
+
+  const ControlButton:React.FC<ControlButtonProps> = ({ onClick, text, active, icon }) => (
+    <button
+    onClick={onClick}
+    className={`dark:border-slate-800 flex items-center justify-center p-2 h-[40px] border 
+    ${icon ? (icon === faReply ? "rounded-tl-md" : icon === faShare && "rounded-tr-md") :
+     text === "f0" ? "rounded-bl-md" : text === "f2" && "rounded-br-md"}
+    ${active ? 'text-slate-900 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' : 'text-slate-600 dark:text-slate-500 cursor-auto'}`}
+  >
+    {icon && <FontAwesomeIcon icon={active ? icon : faBan} />}
+    {text && <h1>{active ? text : <FontAwesomeIcon icon={faBan}/>}</h1>}
+  </button>
+  );
+  
+  
+  const ColorButton: React.FC<ColorButtonProps> = ({ key, onClick, color }) => (
+    <button
+      key={key}
+      onClick={() => onClick(color)}
+      className={`dark:border-slate-800 border p-1 w-9 h-9 
+      ${playground[0].ruleset.color[0] === color ? "rounded-t-md" :
+       playground[0].ruleset.color[playground[0].ruleset.color.length - 1] === color && "rounded-b-md"}`}
+    >
+      <div className={`bg-${color}-500 w-full h-full rounded-md`} />
+    </button>
+  );
+  
+
+  
   return (
     <div>
       <h1 className='font-semibold text-slate-900 dark:text-slate-300'>Commands</h1>
-      <div className='flex text-slate-900 dark:text-slate-300'>
-        <div className='grid grid-cols-3 p-2'>
-          <button onClick={() => updateSelectedNotation('left')} className='dark:border-slate-800 flex items-center justify-center p-2 border rounded-tl-md'>
-            <FontAwesomeIcon icon={faReply} />
-          </button>
-          <button onClick={() => updateSelectedNotation('forward')} className='dark:border-slate-800 flex items-center justify-center p-2 border-y'>
-            <FontAwesomeIcon icon={faUpLong} />
-          </button>
-          <button onClick={() => updateSelectedNotation('right')} className='dark:border-slate-800 flex items-center justify-center p-2 border rounded-tr-md'>
-            <FontAwesomeIcon icon={faShare} />
-          </button>
-
-          <button onClick={() => updateSelectedNotation('f0')} className='dark:border-slate-800 border-b border-r border-l rounded-bl-md flex items-center justify-center p-2 w-10 h-10'>
-            f0
-          </button>
-          <button onClick={() => updateSelectedNotation('f1')} className='dark:border-slate-800 border-b flex items-center justify-center p-2 w-10 h-10'>
-            f1
-          </button>
-          <button onClick={() => updateSelectedNotation('f2')} className='dark:border-slate-800 border-b border-r border-l rounded-br-md flex items-center justify-center p-2 w-10 h-10'>
-            f2
-          </button>
+      <div className="flex">
+        <div className="grid grid-cols-3 p-4">
+          <ControlButton
+            onClick={() => playground[0].ruleset.control.includes("left") && updateSelectedNotation('left')}
+            active={playground[0].ruleset.control.includes("left")}
+            icon={faReply}
+          />
+          <ControlButton
+            onClick={() => playground[0].ruleset.control.includes("forward") && updateSelectedNotation('forward')}
+            active={playground[0].ruleset.control.includes("forward")}
+            icon={faUpLong}
+          />
+          <ControlButton
+            onClick={() => playground[0].ruleset.control.includes("right") && updateSelectedNotation('right')}
+            active={playground[0].ruleset.control.includes("right")}
+            icon={faShare}
+          />
+          <ControlButton
+            onClick={() => playground[0].ruleset.functions.find((item) => item.name === "f0") && updateSelectedNotation('f0')}
+            active={!!playground[0].ruleset.functions.find((item) => item.name === "f0")}
+            text="f0"
+          />
+          <ControlButton
+            onClick={() => playground[0].ruleset.functions.find((item) => item.name === "f1") && updateSelectedNotation('f1')}
+            active={!!playground[0].ruleset.functions.find((item) => item.name === "f1")}
+            text="f1"
+          />
+          <ControlButton
+            onClick={() => playground[0].ruleset.functions.find((item) => item.name === "f2") && updateSelectedNotation('f2')}
+            active={!!playground[0].ruleset.functions.find((item) => item.name === "f2")}
+            text="f2"
+          />
         </div>
 
-        <div className='grid grid-cols-1'>
-          <button onClick={() => updateSelectedNotation('red')} className='dark:border-slate-800 border rounded-t-md p-1 w-9 h-9'>
-            <div className='bg-red-500 w-full h-full rounded-md' />
-          </button>
-          <button onClick={() => updateSelectedNotation('purple')} className='dark:border-slate-800 border-x p-1 w-9 h-9'>
-            <div className='bg-purple-500 w-full h-full rounded-md' />
-          </button>
-          <button onClick={() => updateSelectedNotation('blue')} className='dark:border-slate-800 border rounded-b-md p-1 w-9 h-9'>
-            <div className='bg-blue-500 w-full h-full rounded-md' />
-          </button>
+        <div className="grid grid-cols-1 h-[10px]">
+          {playground[0].ruleset.color.map((item, index) => (
+            <ColorButton
+              key={index}
+              onClick={updateSelectedNotation}
+              color={item}
+            />
+          ))}
         </div>
       </div>
     </div>

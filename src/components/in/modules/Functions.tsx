@@ -1,6 +1,7 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faReply, faShare, faUpLong } from '@fortawesome/free-solid-svg-icons'
+import { playground } from '../maps'
 
 type Props = {
     selected: number[] | null,
@@ -29,7 +30,6 @@ const Functions: React.FC<Props> = ({selected, setSelected, notation}) => {
             const buttonClassName = `${(selected && selected[0] === i) && (selected && selected[1] === layer) && 'bg-slate-100 dark:bg-slate-800'}
              dark:border-slate-800 border-r border-y flex items-center justify-center text-sm ${isLastButton ? 'rounded-r-md' : 'rounded-y-md'}`;
             buttons.push(
-                
                 <button
                     key={i}
                     className={buttonClassName}
@@ -42,13 +42,13 @@ const Functions: React.FC<Props> = ({selected, setSelected, notation}) => {
                     {/* Showing icon/color/function number */}
                     
                     
-                    {/* left/right/forward */}
+                    {/* direction */}
                     {notation[layer - 1] && notation[layer - 1][i] && (notation[layer -1][i] === "left" || notation[layer - 1][i] === "right" || notation[layer - 1][i] === "forward") ? (
                         <FontAwesomeIcon icon={whichIcon(notation[layer - 1][i])} />    
 
-                    // red/purple/blue 
-                    ) : (notation[layer - 1] && notation[layer - 1][i] && (notation[layer - 1][i] === "red" || notation[layer - 1][i] === "purple" || notation[layer - 1][i] === "blue")) ? (
-                        <div className={`bg-${notation[layer - 1][i]}-500 p-3 rounded-md`} />
+                    // color 
+                    ) : (notation[layer - 1] && notation[layer - 1][i] && (playground[0].ruleset.color.includes(notation[layer - 1][i]))) ? (
+                        <div className={`bg-${notation[layer - 1][i]}-500 p-3 rounded-md`} ></div>
 
                     // mixed color(condution + color/functionNumber)
                     ) : (notation[layer -1] && notation[layer - 1][i] && (notation[layer - 1][i].includes("-"))) ? (
@@ -71,16 +71,14 @@ const Functions: React.FC<Props> = ({selected, setSelected, notation}) => {
         <div>
             <h1 className='font-semibold text-slate-900 dark:text-slate-300'>Functions</h1>
             <div className='flex flex-col text-slate-900 dark:text-slate-300'>
-                <div className='grid grid-cols-12 p-2'>
+                {playground[0].ruleset.functions.map((item, index) => (
+                    <div key={index} className='grid grid-cols-12 p-2'>
                     <h2 className='p-1 px-2 font-semibold bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300
-                     border-slate-300 dark:border-slate-900 border-l border-y rounded-l-md'>F0</h2>
-                    {renderNotionButtons(1,10)}                 
-                </div>
-                <div className='grid grid-cols-12 p-2'>
-                    <h2 className='px-2 p-1 font-semibold bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300
-                     border-slate-300 dark:border-slate-900 border-l border-y rounded-l-md'>F1</h2>
-                    {renderNotionButtons(2,10)}                    
-                </div>
+                     border-slate-300 dark:border-slate-900 border-l border-y rounded-l-md'>{item.name}</h2>
+                     {renderNotionButtons(index+1,item.args)}
+                    </div>
+                ))}
+            
             </div>
         </div>
     )
