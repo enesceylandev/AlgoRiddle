@@ -4,6 +4,8 @@ import React, { useState, useRef } from 'react';
 
 type Props = {
     notation: string[][];
+    list: string[];
+    setList: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
 const whichIcon = (direction: string) => {
@@ -19,8 +21,7 @@ const whichIcon = (direction: string) => {
     };
 };
 
-const NotationList: React.FC<Props> = ({ notation }) => {
-    const [list, setList] = useState<string[]>([]);
+const NotationList: React.FC<Props> = ({ notation, list, setList }) => {
     const iterationRef = useRef<number>(0);
     
 
