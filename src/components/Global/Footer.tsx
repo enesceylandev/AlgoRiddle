@@ -26,17 +26,17 @@ const Footer: React.FC = () => {
     <div className='border-t dark:border-slate-800 w-full flex justify-center px-16 py-6'>
       <div className='lg:max-w-[1000px] w-full flex flex-col justify-between space-y-9'>
         <div className='grid grid-cols-10 lg:space-y-0 space-y-8'>
-          <div className='lg:col-span-4 col-span-10 space-y-2'>
+          <div className='lg:col-span-6 col-span-10 space-y-2'>
             <Link to='/' className='text-3xl font-semibold text-slate-900 dark:text-slate-100'>{process.env.REACT_APP_BRANDNAME}</Link>
           </div>
           <FooterSection title='Product'>
             <FooterLink to='/play' text='Play' />
             <FooterLink to='/about#team' text='Team' />
           </FooterSection>
-          <FooterSection title='Support'>
+          {/* <FooterSection title='Support'>
             <FooterLink to='/howtoplay' text='How To Play' />
             <FooterLink to='/tips' text='Tricks And Tips' />
-          </FooterSection>
+          </FooterSection> */}
           <FooterSection title='Company'>
             <FooterLink to='/about' text='About' />
           </FooterSection>

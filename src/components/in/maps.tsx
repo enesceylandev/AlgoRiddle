@@ -19,6 +19,195 @@ export const playground: Map[] = [
         ruleset: {
             control: [ 'left', 'forward', 'right'],
             color: ['red', 'purple', 'blue'],
+            functions: [{ name: 'f0', args: 5 }]
+        },
+        player: {
+            spawn: [10, 3],
+            direction: 'down'
+        },
+        board: [
+            {
+                cord: [10, 3],
+                color: 'blue'
+            },
+            {
+                cord: [10, 4],
+                color: 'blue'
+            },
+            {
+                cord: [9, 4],
+                color: 'blue'
+            },
+            {
+                cord: [9, 5],
+                color: 'blue'
+            },
+            {
+                cord: [8, 5],
+                color: 'blue'
+            },
+            {
+                cord: [8, 6],
+                color: 'blue'
+            },
+            {
+                cord: [7, 6],
+                color: 'blue'
+            },
+            {
+                cord: [7, 7],
+                color: 'blue'
+            },
+            {
+                cord: [6, 7],
+                color: 'blue'
+            },
+            {
+                cord: [6, 8],
+                color: 'blue'
+            },
+            {
+                cord: [5, 8],
+                color: 'purple'
+            },
+            {
+                cord: [5, 9],
+                color: 'purple'
+            },
+            {
+                cord: [6, 9],
+                color: 'blue'
+            },
+            {
+                cord: [6, 10],
+                color: 'blue'
+            },
+            {
+                cord: [7, 10],
+                color: 'blue'
+            },
+            {
+                cord: [7, 11],
+                color: 'blue'
+            },
+            {
+                cord: [8, 11],
+                color: 'blue'
+            },
+            {
+                cord: [8, 12],
+                color: 'blue'
+            },
+            {
+                cord: [9, 12],
+                color: 'blue'
+            },
+            {
+                cord: [9, 13],
+                color: 'blue'
+            },
+            {
+                cord: [10, 13],
+                color: 'blue'
+            },
+            {
+                cord: [10, 14],
+                color: 'blue'
+            }
+
+        ]
+    },
+    {
+        ruleset: {
+            control: [ 'left', 'forward', 'right'],
+            color: ['red', 'purple', 'blue'],
+            functions: [{ name: 'f0', args: 6 }]
+        },
+        player: {
+            spawn: [2, 10],
+            direction: 'right'
+        },
+        board: [
+            {
+                cord: [2, 10],
+                color: 'blue'
+            },
+            {
+                cord: [3, 10],
+                color: 'blue',
+                required: true
+            },
+            {
+                cord: [4, 10],
+                color: 'blue'
+            },
+            {
+                cord: [5, 10],
+                color: 'blue'
+            },
+            {
+                cord: [6, 10],
+                color: 'blue'
+            },
+            {
+                cord: [7, 10],
+                color: 'blue'
+            },
+            {
+                cord: [8, 10],
+                color: 'blue',
+                required: true
+            },
+            {
+                cord: [9, 10],
+                color: 'blue'
+            },
+            {
+                cord: [10, 10],
+                color: 'purple'
+            },
+            {
+                cord: [11, 10],
+                color: 'blue'
+            },
+            {
+                cord: [11, 9],
+                color: 'blue'
+            },            {
+                cord: [12, 9],
+                color: 'blue'
+            },
+            {
+                cord: [12, 8],
+                color: 'blue'
+            },            {
+                cord: [13, 8],
+                color: 'blue'
+            },
+            {
+                cord: [13, 7],
+                color: 'blue'
+            },            {
+                cord: [14, 7],
+                color: 'blue'
+            },
+            {
+                cord: [14, 6],
+                color: 'blue'
+            },            {
+                cord: [15, 6],
+                color: 'blue'
+            },
+            {
+                cord: [15, 5],
+                color: 'blue'
+            }
+        ]
+    },
+    {
+        ruleset: {
+            control: [ 'left', 'forward', 'right'],
+            color: ['red', 'purple', 'blue'],
             functions: [{ name: 'f0', args: 5 }, { name: 'f1', args: 7 }]
         },
         player: {
@@ -45,7 +234,7 @@ export const playground: Map[] = [
             },
             {
                 cord: [8, 5],
-                color: 'purple'
+                color: 'blue'
             },
             {
                 cord: [9, 5],

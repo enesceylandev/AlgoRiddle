@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import Board from './Board'
 import Commands from './modules/Commands'
 import NotationList from './modules/NotationList'
@@ -24,8 +24,8 @@ const Play: React.FC = () => {
           <Functions selected={selected} setSelected={setSelected} notation={notation}/>
           <Commands selected={selected} notation={notation} setNotation={setNotation}/>
         </div>
-        <Board list={list} iterationRef={iterationRef} player={player} setPlayer={setPlayer}/>
-        <NotationList notation={notation} list={list} setList={setList} iterationRef={iterationRef} player={player}/>
+        <Board player={player}/>
+        <NotationList notation={notation} list={list} setList={setList} iterationRef={iterationRef} player={player} setPlayer={setPlayer}/>
     </div>
   )
 }
