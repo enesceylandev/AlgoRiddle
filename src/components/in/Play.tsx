@@ -5,12 +5,18 @@ import NotationList from './modules/NotationList'
 import Functions from './modules/Functions'
 import { playground } from './maps'
 
+type requiredRef = {
+  cord: number[];
+  color: string;
+  required?: boolean;
+}[]
 const Play: React.FC = () => {
   const [selected, setSelected] = useState<number[] | null>(null)
   const [notation, setNotation] = useState<string[][]>([])
 
   const [list, setList] = useState<string[]>([]);
   const iterationRef = useRef<number>(0);
+  const [requiredRef, setRequiredRef] = React.useState<requiredRef>(playground[0].board.filter((item) => item.required === true));
 
   const [player, setPlayer] = useState<{ cords: number[], direction: string | undefined }>({
     cords: [playground[0].player.spawn[0], playground[0].player.spawn[1]],
@@ -24,8 +30,8 @@ const Play: React.FC = () => {
           <Functions selected={selected} setSelected={setSelected} notation={notation}/>
           <Commands selected={selected} notation={notation} setNotation={setNotation}/>
         </div>
-        <Board player={player}/>
-        <NotationList notation={notation} list={list} setList={setList} iterationRef={iterationRef} player={player} setPlayer={setPlayer}/>
+        <Board player={player} requiredRef={requiredRef} setRequiredRef={setRequiredRef}/>
+        <NotationList notation={notation} list={list} setList={setList} iterationRef={iterationRef} player={player} setPlayer={setPlayer} requiredRef={requiredRef} setRequiredRef={setRequiredRef}/>
     </div>
   )
 }

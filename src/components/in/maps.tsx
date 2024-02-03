@@ -19,6 +19,70 @@ export const playground: Map[] = [
         ruleset: {
             control: [ 'left', 'forward', 'right'],
             color: ['red', 'purple', 'blue'],
+            functions: [{ name: 'f0', args: 3 }, { name: 'f1', args: 3 }]
+        },
+        player: {
+            spawn: [2, 8],
+            direction: 'right'
+        },
+        board: [
+            {
+                cord: [2, 8],
+                color: 'blue'
+            },
+            {
+                cord: [3, 8],
+                color: 'blue'
+            },
+            {
+                cord: [4, 8],
+                color: 'blue'
+            },
+            {
+                cord: [5, 8],
+                color: 'blue',
+                required: true
+            },
+            {
+                cord: [6, 8],
+                color: 'blue'
+            },
+            {
+                cord: [7, 8],
+                color: 'blue'
+            },
+            {
+                cord: [8, 8],
+                color: 'blue'
+            },
+            {
+                cord: [9, 8],
+                color: 'purple'
+            },
+            {
+                cord: [10, 8],
+                color: 'purple',
+                required: true
+            },
+            {
+                cord: [11, 8],
+                color: 'purple'
+            },
+            {
+                cord: [12, 8],
+                color: 'blue'
+            },
+            {
+                cord: [12, 7],
+                color: 'blue',
+                required: true
+            }
+        ]
+    },
+    {
+        ruleset: {
+            control: [ 'left', 'forward', 'right'],
+            color: ['red', 'purple', 'blue'],
             functions: [{ name: 'f0', args: 5 }]
         },
         player: {

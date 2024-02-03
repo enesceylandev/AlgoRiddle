@@ -1,4 +1,4 @@
-import { faPlay, faReply, faRotateRight, faShare, faStop, faUpLong } from '@fortawesome/free-solid-svg-icons';
+import { faGauge, faPlay, faReply, faRotateRight, faShare, faStop, faUpLong } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect } from 'react';
 import cloneDeep from 'lodash/cloneDeep';
@@ -11,6 +11,14 @@ type Props = {
     iterationRef: React.MutableRefObject<number>;
     player: { cords: number[], direction: string | undefined };
     setPlayer: React.Dispatch<React.SetStateAction<{ cords: number[]; direction: string | undefined; }>>;
+    
+    requiredRef: {
+        cord: number[];
+        color: string;
+        required?: boolean;
+    }[];
+    setRequiredRef: React.Dispatch<React.SetStateAction<Props['requiredRef']>>;
+
 };
 
 const whichIcon = (direction: string) => {
@@ -26,49 +34,9 @@ const whichIcon = (direction: string) => {
     };
 };
 
-const NotationList: React.FC<Props> = ({ notation, list, setList, iterationRef, player, setPlayer }) => {
+const NotationList: React.FC<Props> = ({ notation, list, setList, iterationRef, player, setPlayer, requiredRef, setRequiredRef }) => {
     
 
-    const calcTurn = (direction: string | undefined, turn: string ) => {
-        if (turn.includes("-")){
-            turn = turn.split("-")[1];
-        }
-        // console.log(direction, turn)
-        switch (direction) {
-            case 'right':
-                // console.log(turn)
-                return turn === "left" ? 'up' : turn === "right" ? 'down' : direction;
-            case 'left':
-                // console.log(turn)
-                return turn === "left" ? 'down' : turn === "right" ? 'up' : direction;
-            case 'up':
-                // console.log(turn)
-                return turn === "left" ? 'left' : turn === "right" ? 'right' : direction;
-            case 'down':
-                // console.log(turn)
-                return turn === "left" ? 'right' : turn === "right" ? 'left' : direction;
-            default:
-                return direction;
-        }
-    }
-    const calcCords = (item: string, playerRef: any) => {
-        const cords = playerRef.cords;
-        const direction = calcTurn(playerRef.direction, item);
-        const move = 1;
-        switch (direction) {
-            case 'right':
-                return [cords[0] + move, cords[1]];
-            case 'left':
-                // console.log(cords[0] - move, cords[1])
-                return [cords[0] - move, cords[1]];
-            case 'up':
-                return [cords[0], cords[1] - move];
-            case 'down':
-                return [cords[0], cords[1] + move];
-            default:
-                return cords;
-        }
-    }
     const checkBlock = (playerRef: any, color: string) => {
         if(color.includes("-")){
         const splitColor = color.split("-")[0];
@@ -88,7 +56,7 @@ const NotationList: React.FC<Props> = ({ notation, list, setList, iterationRef, 
         const processItem = (index: number, notationArray: string[], currentIteration: number) => {
             if (notationArray && index < notationArray.length && currentIteration === iterationRef.current) {
                 const item = notationArray[index];
-                console.log(notationRef[0].slice(index + 1))
+                // console.log(notationRef[0].slice(index + 1))
     
                 if (item) {
                     if(item.includes("forward")){
@@ -135,7 +103,7 @@ const NotationList: React.FC<Props> = ({ notation, list, setList, iterationRef, 
         
         const turnOrMovePlayer = (direction: string | undefined, x: number, y: number) => {
             if (direction !== undefined) {
-                console.log(lastAction, x, y)
+                // console.log(lastAction, x, y)
                 if ((!!lastAction.split("-") && lastAction.split("-")[1] === "forward") || lastAction === "forward") {
                     if (player.direction === 'up') {
                         movePlayer(0, -1);
@@ -192,7 +160,7 @@ const NotationList: React.FC<Props> = ({ notation, list, setList, iterationRef, 
             if (!!matchingColorLocation) {
                 // const action = calcTurn(player.direction, lastAction.split("-")[1]);
                 const action = lastAction.split("-")[1];
-                console.log("direction+action : " + player.direction, action)
+                // console.log("direction+action : " + player.direction, action)
                 if (action.includes("forward")) {
                     turnOrMovePlayer(player.direction, player.direction === "right" ? 1 : -1, 0);
                 } else {
@@ -202,6 +170,46 @@ const NotationList: React.FC<Props> = ({ notation, list, setList, iterationRef, 
         } // eslint-disable-next-line
     }, [list]);
 
+    const calcTurn = (direction: string | undefined, turn: string ) => {
+        if (turn.includes("-")){
+            turn = turn.split("-")[1];
+        }
+        // console.log(direction, turn)
+        switch (direction) {
+            case 'right':
+                // console.log(turn)
+                return turn === "left" ? 'up' : turn === "right" ? 'down' : direction;
+            case 'left':
+                // console.log(turn)
+                return turn === "left" ? 'down' : turn === "right" ? 'up' : direction;
+            case 'up':
+                // console.log(turn)
+                return turn === "left" ? 'left' : turn === "right" ? 'right' : direction;
+            case 'down':
+                // console.log(turn)
+                return turn === "left" ? 'right' : turn === "right" ? 'left' : direction;
+            default:
+                return direction;
+        }
+    }
+    const calcCords = (item: string, playerRef: any) => {
+        const cords = playerRef.cords;
+        const direction = calcTurn(playerRef.direction, item);
+        const move = 1;
+        switch (direction) {
+            case 'right':
+                return [cords[0] + move, cords[1]];
+            case 'left':
+                // console.log(cords[0] - move, cords[1])
+                return [cords[0] - move, cords[1]];
+            case 'up':
+                return [cords[0], cords[1] - move];
+            case 'down':
+                return [cords[0], cords[1] + move];
+            default:
+                return cords;
+        }
+    }
     const movePlayer = (x:number,y:number) => {
         !isValid(player.cords[0] + x, player.cords[1] + y) && (iterationRef.current += 1);
         // console.log(playground[0].board.find(select => select.cord[0] === player.cords[0] + x && select.cord[1] === player.cords[1] + y))
@@ -251,25 +259,43 @@ const NotationList: React.FC<Props> = ({ notation, list, setList, iterationRef, 
         return (playground[0].board.some((select) => select.cord[0] === x && select.cord[1] === y))
     }
 
+    // const startProcess = () => {
+    //     setList([]);
+    //     iterationRef.current += 1; 
+    //     ReadNotation(0, player, notation);
+    // };
 
-    const startProcess = () => {
-        setList([]);
-        iterationRef.current += 1; 
-        ReadNotation(0, player, notation);
-    };
+    // const stopProcess = () => { 
+    //     iterationRef.current += 1;
+    //     // console.log(playground[0].board.filter((item) => item.required === true))
+    //     setRequiredRef(playground[0].board.filter((item) => item.required === true));
+    // };
 
-    const stopProcess = () => { 
+    // const resetProcess = () => { 
+    //     setList([]);
+    //     iterationRef.current += 1;
+    //     setRequiredRef(playground[0].board.filter((item) => item.required === true));
+    // };
+
+    const changeProcess = (status:string) => {
         iterationRef.current += 1;
-    };
-
-    const resetProcess = () => { 
-        setList([]);
-        iterationRef.current += 1;
-    };
+        if(status === "start"){
+            ReadNotation(0, player, notation);
+        }else{
+            setRequiredRef(playground[0].board.filter((item) => item.required === true));
+        }
+        if(status !== "stop"){
+            setList([]);
+        }
+    }
 
     return (
         <div className='z-20'>
-            <div className='border-x border-t dark:border-slate-800 p-2 rounded-t-md text-slate-300 h-60 overflow-auto scroll-smooth'>
+            {/* <div className='border-x border-t rounded-t-md dark:border-slate-800 p-2 justify-between flex rounded-b-md'>
+                <FontAwesomeIcon icon={faPlay} className='border dark:border-slate-800 rounded-md w-10 p-2 text-lg hover:cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800 text-green-500 hover:text-green-600'/>
+                <FontAwesomeIcon icon={faGauge} className='border dark:border-slate-800 rounded-md w-10 p-2 text-lg hover:cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800 text-red-500 hover:text-red-600'/>
+            </div> */}
+            <div className='border-x dark:border-slate-800 p-2 text-slate-300 h-60 overflow-auto scroll-smooth'>
                 <ul className='grid grid-cols-4 items-center gap-1 w-[18rem]'>
                     {list.map((item, index) => (
                         <li key={index} className='dark:bg-[#162137] bg-slate-100 hover:bg-slate-200 dark:hover:bg-[#243047] text-slate-800 dark:text-slate-300 
@@ -288,7 +314,8 @@ const NotationList: React.FC<Props> = ({ notation, list, setList, iterationRef, 
                                 :
                                     <div className='p-0.5 w-7 h-7'>
                                         <div className={`bg-${item.split("-")[0]}-500 w-full h-full rounded-md flex items-center justify-center`}>
-                                            {!!item.split("-")[1] && !!item.split("-")[1].includes("0" || "1" || "2") ? item.split("-")[1] : item.includes("f0" || "f1" || "f2") ? item : null}
+                                            {/* {item.split("f")[1]} */}
+                                            {!!item.split("-")[1] && !!item.split("-")[1].includes("0" || "1" || "2") ? item.split("-")[1] : (!!item.split("f")[1] && (item.split("f")[1] == "0" || "1" || "2") ? item : null)}
                                         </div>
                                     </div>
                                 }
@@ -298,9 +325,9 @@ const NotationList: React.FC<Props> = ({ notation, list, setList, iterationRef, 
                 </ul>
             </div>
             <div className='border-x border-b dark:border-slate-800 p-2 justify-between flex rounded-b-md'>
-                <FontAwesomeIcon icon={faPlay} className='border dark:border-slate-800 rounded-md w-10 p-2 text-lg hover:cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800 text-green-500 hover:text-green-600' onClick={startProcess}/>
-                <FontAwesomeIcon icon={faRotateRight} className='border dark:border-slate-800 rounded-md w-10 p-2 text-lg hover:cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800 text-blue-500 hover:text-blue-600' onClick={resetProcess}/>
-                <FontAwesomeIcon icon={faStop} className='border dark:border-slate-800 rounded-md w-10 p-2 text-lg hover:cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800 text-red-500 hover:text-red-600' onClick={stopProcess}/>
+                <FontAwesomeIcon icon={faPlay} onClick={()=> changeProcess("start")} className='border dark:border-slate-800 rounded-md w-10 p-2 text-lg hover:cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800 text-green-500 hover:text-green-600'/>
+                <FontAwesomeIcon icon={faRotateRight} onClick={()=> changeProcess("reset")} className='border dark:border-slate-800 rounded-md w-10 p-2 text-lg hover:cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800 text-blue-500 hover:text-blue-600'/>
+                <FontAwesomeIcon icon={faStop} onClick={()=> changeProcess("stop")} className='border dark:border-slate-800 rounded-md w-10 p-2 text-lg hover:cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800 text-red-500 hover:text-red-600'/>
             </div>
         </div>
     );

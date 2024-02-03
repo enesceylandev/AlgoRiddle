@@ -1,14 +1,51 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShuttleSpace } from '@fortawesome/free-solid-svg-icons';
+import { faShuttleSpace, faStar } from '@fortawesome/free-solid-svg-icons';
 import { playground } from './maps';
 
 type Props = {
     player: { cords: number[], direction: string | undefined };
+    requiredRef: {
+        cord: number[];
+        color: string;
+        required?: boolean;
+    }[];
+    setRequiredRef: React.Dispatch<React.SetStateAction<Props['requiredRef']>>;
 };
-const Play: React.FC<Props> = ({ player}) => {
+
+const Play: React.FC<Props> = ({ player, requiredRef, setRequiredRef}) => {
     const gridSize = 18; // VisibleGrid (GridSize+2) ex. gridSize = 18 => 16x16 visible grid
     const opacityStep = 0.02;
+    
+    useEffect(()=> {
+        if(requiredRef !== undefined && requiredRef.length > 0){
+            if (player.cords[0] === requiredRef[0].cord[0] && player.cords[1] === requiredRef[0].cord[1]) {
+                setRequiredRef(requiredRef.slice(1));
+            }
+        }else{
+            console.log("You Win!");
+        }
+    }, [player, requiredRef])
+
+    const generateIcon = (x:number, y:number) => {
+        if (player.cords[0] === x && player.cords[1] === y) {
+            switch (player.direction) {
+                case 'right':
+                    return <FontAwesomeIcon icon={faShuttleSpace} className='rotate-0' />;
+                case 'left':
+                    return <FontAwesomeIcon icon={faShuttleSpace} className='rotate-180'/>;
+                case 'up':
+                    return <FontAwesomeIcon icon={faShuttleSpace} className='-rotate-90'/>;
+                case 'down':
+                    return <FontAwesomeIcon icon={faShuttleSpace} className='rotate-90'/>;
+                default:
+                    return null;
+            }
+        }
+        else if(requiredRef.some((item)=> item.cord[0] === x && item.cord[1] === y)){
+            return <FontAwesomeIcon icon={faStar} className='text-white' />;
+        }
+    }
 
     const renderGrid = () => {
         const grid = [];
@@ -34,30 +71,13 @@ const Play: React.FC<Props> = ({ player}) => {
                     margin: `${margin}px`
                 };
 
-                const arrowIcon = () => {
-                    if (player.cords[0] === x && player.cords[1] === y) {
-                        switch (player.direction) {
-                            case 'right':
-                                return <FontAwesomeIcon icon={faShuttleSpace} className='rotate-0' />;
-                            case 'left':
-                                return <FontAwesomeIcon icon={faShuttleSpace} className='rotate-180'/>;
-                            case 'up':
-                                return <FontAwesomeIcon icon={faShuttleSpace} className='-rotate-90'/>;
-                            case 'down':
-                                return <FontAwesomeIcon icon={faShuttleSpace} className='rotate-90'/>;
-                            default:
-                                return null;
-                        }
-                    }
-                    return null;
-                };
 
                 row.push(
                     <div key={`${x},${y}`} className={`flex items-center justify-center text-slate-100 dark:text-slate-100
                     bg-${playground[0].board.some((item)=> item.cord[0] === x && item.cord[1] === y) ? 
                     playground[0].board.find((item) => item.cord[0] === x && item.cord[1] === y)?.color : undefined}-500 `} style={style} 
                     onClick={() => console.log(x + "," + y)}>
-                        {arrowIcon()}
+                        {generateIcon(x,y)}
                         {/* {x},{y} */}
                     </div>
                 );
