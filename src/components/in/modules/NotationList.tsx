@@ -1,4 +1,4 @@
-import { faGauge, faPlay, faReply, faRotateRight, faShare, faStop, faUpLong } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisVertical, faGauge, faGaugeHigh, faPlay, faReply, faRotateRight, faShare, faStop, faUpLong } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect } from 'react';
 import cloneDeep from 'lodash/cloneDeep';
@@ -7,18 +7,20 @@ import { playground } from '../maps';
 type Props = {
     notation: string[][];
     list: string[];
-    setList: React.Dispatch<React.SetStateAction<string[]>>;
+
     iterationRef: React.MutableRefObject<number>;
     player: { cords: number[], direction: string | undefined };
-    setPlayer: React.Dispatch<React.SetStateAction<{ cords: number[]; direction: string | undefined; }>>;
     
     requiredRef: {
         cord: number[];
         color: string;
         required?: boolean;
     }[];
-    setRequiredRef: React.Dispatch<React.SetStateAction<Props['requiredRef']>>;
 
+    setList: React.Dispatch<React.SetStateAction<string[]>>;
+    setPlayer: React.Dispatch<React.SetStateAction<{ cords: number[]; direction: string | undefined; }>>;
+    setRequiredRef: React.Dispatch<React.SetStateAction<Props['requiredRef']>>;
+    setMapSelectorPopup: React.Dispatch<React.SetStateAction<boolean>>
 };
 
 const whichIcon = (direction: string) => {
@@ -33,74 +35,66 @@ const whichIcon = (direction: string) => {
             return faReply;
     };
 };
-
-const NotationList: React.FC<Props> = ({ notation, list, setList, iterationRef, player, setPlayer, requiredRef, setRequiredRef }) => {
-    
-
-    const checkBlock = (playerRef: any, color: string) => {
-        if(color.includes("-")){
-        const splitColor = color.split("-")[0];
-        const matchingColorLocation = playground[0].board.find(select =>
-            select.cord[0] === playerRef.cords[0] && select.cord[1] === playerRef.cords[1] && select.color === splitColor);
-            return !!matchingColorLocation
-        } else {
-            return true
-        }
+const calcTurn = (direction: string | undefined, turn: string ) => {
+    if (turn.includes("-")){
+        turn = turn.split("-")[1];
     }
-    const ReadNotation = (i: number, playerClone: any, notationClone: any) => {
-        const delayBetweenSteps = 100;
-        const notationRef = cloneDeep(notationClone);
-        const notationArray = notationRef[i];
-        let playerRef = cloneDeep(playerClone);
-        let index = 0;
-        const processItem = (index: number, notationArray: string[], currentIteration: number) => {
-            if (notationArray && index < notationArray.length && currentIteration === iterationRef.current) {
-                const item = notationArray[index];
-                // console.log(notationRef[0].slice(index + 1))
-    
-                if (item) {
-                    if(item.includes("forward")){
-                        playerRef.cords = calcCords(item, playerRef);
-                    }
-                    playerRef.direction = calcTurn(playerRef.direction, item);
-                    // console.log(playerRef.direction)
-                    setList((prevList) => [...prevList, item])
-                    
-                    // && checkBlock(playerRef, item.split("-")[0])
-                    if (item.includes("f") && !item.includes("forward") && !item.includes("left") && checkBlock(playerRef, item)) {
-                        let test = notation[0].slice(index + 1)
-                        notationRef[0].push(...test);
-                        iterationRef.current += 1;
+    // console.log(direction, turn)
+    switch (direction) {
+        case 'right':
+            // console.log(turn)
+            return turn === "left" ? 'up' : turn === "right" ? 'down' : direction;
+        case 'left':
+            // console.log(turn)
+            return turn === "left" ? 'down' : turn === "right" ? 'up' : direction;
+        case 'up':
+            // console.log(turn)
+            return turn === "left" ? 'left' : turn === "right" ? 'right' : direction;
+        case 'down':
+            // console.log(turn)
+            return turn === "left" ? 'right' : turn === "right" ? 'left' : direction;
+        default:
+            return direction;
+    }
+}
+const calcCords = (item: string, playerRef: any) => {
+    const cords = playerRef.cords;
+    const direction = calcTurn(playerRef.direction, item);
+    const move = 1;
+    switch (direction) {
+        case 'right':
+            return [cords[0] + move, cords[1]];
+        case 'left':
+            // console.log(cords[0] - move, cords[1])
+            return [cords[0] - move, cords[1]];
+        case 'up':
+            return [cords[0], cords[1] - move];
+        case 'down':
+            return [cords[0], cords[1] + move];
+        default:
+            return cords;
+    }
+}
+const checkBlock = (playerRef: any, color: string) => {
+    if(color.includes("-")){
+    const splitColor = color.split("-")[0];
+    const matchingColorLocation = playground[0].board.find(select =>
+        select.cord[0] === playerRef.cords[0] && select.cord[1] === playerRef.cords[1] && select.color === splitColor);
+        return !!matchingColorLocation
+    } else {
+        return true
+    }
+}
+const isValid = (x:number, y:number) => {
+    return (playground[0].board.some((select) => select.cord[0] === x && select.cord[1] === y))
+}
 
-                        // Bunu yapmak fonksiyonu iptal ederken sıkıntı çıkartıyor bir sonraki update de bakılacak
-                        setTimeout(()=> {
-                            ReadNotation(parseInt(item.split("f")[1]), playerRef, notationRef);
-                        }, delayBetweenSteps);
-                    }
-                    
-                }
 
-                index++;
-                setTimeout(() => {
-                    processItem(index, notationArray, currentIteration);
-    
-                    // Scroll to bottom after each step
-                    const element = document.querySelector(".scroll-smooth");
-                    element?.scrollTo({
-                        top: element.scrollHeight,
-                        behavior: "smooth"
-                    });
-    
-                }, delayBetweenSteps);
-            }
-        };
-    
-        processItem(index, notationArray, iterationRef.current);
-    };
+const NotationList: React.FC<Props> = ({ notation, list, setList, iterationRef, player, setPlayer, requiredRef, setRequiredRef, setMapSelectorPopup }) => {
+    const [gameSpeed, setGameSpeed] = React.useState<number>(200);
 
     useEffect(() => {
         const lastAction = list[list.length - 1];
-        
         const turnOrMovePlayer = (direction: string | undefined, x: number, y: number) => {
             if (direction !== undefined) {
                 // console.log(lastAction, x, y)
@@ -170,46 +164,56 @@ const NotationList: React.FC<Props> = ({ notation, list, setList, iterationRef, 
         } // eslint-disable-next-line
     }, [list]);
 
-    const calcTurn = (direction: string | undefined, turn: string ) => {
-        if (turn.includes("-")){
-            turn = turn.split("-")[1];
-        }
-        // console.log(direction, turn)
-        switch (direction) {
-            case 'right':
-                // console.log(turn)
-                return turn === "left" ? 'up' : turn === "right" ? 'down' : direction;
-            case 'left':
-                // console.log(turn)
-                return turn === "left" ? 'down' : turn === "right" ? 'up' : direction;
-            case 'up':
-                // console.log(turn)
-                return turn === "left" ? 'left' : turn === "right" ? 'right' : direction;
-            case 'down':
-                // console.log(turn)
-                return turn === "left" ? 'right' : turn === "right" ? 'left' : direction;
-            default:
-                return direction;
-        }
-    }
-    const calcCords = (item: string, playerRef: any) => {
-        const cords = playerRef.cords;
-        const direction = calcTurn(playerRef.direction, item);
-        const move = 1;
-        switch (direction) {
-            case 'right':
-                return [cords[0] + move, cords[1]];
-            case 'left':
-                // console.log(cords[0] - move, cords[1])
-                return [cords[0] - move, cords[1]];
-            case 'up':
-                return [cords[0], cords[1] - move];
-            case 'down':
-                return [cords[0], cords[1] + move];
-            default:
-                return cords;
-        }
-    }
+    const ReadNotation = (i: number, playerClone: any, notationClone: any) => {
+        const delayBetweenSteps = gameSpeed;
+        const notationRef = cloneDeep(notationClone);
+        const notationArray = notationRef[i];
+        let playerRef = cloneDeep(playerClone);
+        let index = 0;
+        const processItem = (index: number, notationArray: string[], currentIteration: number) => {
+            if (notationArray && index < notationArray.length && currentIteration === iterationRef.current) {
+                const item = notationArray[index];
+                
+                if (item) {
+                    if(item.includes("forward")){
+                        playerRef.cords = calcCords(item, playerRef);
+                    }
+                    playerRef.direction = calcTurn(playerRef.direction, item);
+                    // console.log(playerRef.direction)
+                    setList((prevList) => [...prevList, item])
+                    
+                    // && checkBlock(playerRef, item.split("-")[0])
+                    if (item.includes("f") && !item.includes("forward") && !item.includes("left") && checkBlock(playerRef, item)) {
+                        let test = notation[0].slice(index + 1)
+                        notationRef[0].push(...test);
+                        iterationRef.current += 1;
+
+                        // Bunu yapmak fonksiyonu iptal ederken sıkıntı çıkartıyor bir sonraki update de bakılacak
+                        setTimeout(()=> {
+                            ReadNotation(parseInt(item.split("f")[1]), playerRef, notationRef);
+                        }, delayBetweenSteps);
+                    }
+                    
+                }
+
+                index++;
+                setTimeout(() => {
+                    processItem(index, notationArray, currentIteration);
+    
+                    // Scroll to bottom after each step
+                    const element = document.querySelector(".scroll-smooth");
+                    element?.scrollTo({
+                        top: element.scrollHeight,
+                        behavior: "smooth"
+                    });
+    
+                }, delayBetweenSteps);
+            }
+        };
+    
+        processItem(index, notationArray, iterationRef.current);
+    };
+    
     const movePlayer = (x:number,y:number) => {
         !isValid(player.cords[0] + x, player.cords[1] + y) && (iterationRef.current += 1);
         // console.log(playground[0].board.find(select => select.cord[0] === player.cords[0] + x && select.cord[1] === player.cords[1] + y))
@@ -255,32 +259,12 @@ const NotationList: React.FC<Props> = ({ notation, list, setList, iterationRef, 
         }
     }
 
-    function isValid(x:number, y:number) {
-        return (playground[0].board.some((select) => select.cord[0] === x && select.cord[1] === y))
-    }
-
-    // const startProcess = () => {
-    //     setList([]);
-    //     iterationRef.current += 1; 
-    //     ReadNotation(0, player, notation);
-    // };
-
-    // const stopProcess = () => { 
-    //     iterationRef.current += 1;
-    //     // console.log(playground[0].board.filter((item) => item.required === true))
-    //     setRequiredRef(playground[0].board.filter((item) => item.required === true));
-    // };
-
-    // const resetProcess = () => { 
-    //     setList([]);
-    //     iterationRef.current += 1;
-    //     setRequiredRef(playground[0].board.filter((item) => item.required === true));
-    // };
-
     const changeProcess = (status:string) => {
         iterationRef.current += 1;
         if(status === "start"){
-            ReadNotation(0, player, notation);
+            setTimeout(()=> {
+                ReadNotation(0, player, notation);
+            }, 100)
         }else{
             setRequiredRef(playground[0].board.filter((item) => item.required === true));
         }
@@ -291,10 +275,14 @@ const NotationList: React.FC<Props> = ({ notation, list, setList, iterationRef, 
 
     return (
         <div className='z-20'>
-            {/* <div className='border-x border-t rounded-t-md dark:border-slate-800 p-2 justify-between flex rounded-b-md'>
-                <FontAwesomeIcon icon={faPlay} className='border dark:border-slate-800 rounded-md w-10 p-2 text-lg hover:cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800 text-green-500 hover:text-green-600'/>
-                <FontAwesomeIcon icon={faGauge} className='border dark:border-slate-800 rounded-md w-10 p-2 text-lg hover:cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800 text-red-500 hover:text-red-600'/>
-            </div> */}
+            <div className='border-x border-t rounded-t-md dark:border-slate-800 p-2 justify-between flex rounded-b-md'>
+                <button className='dark:border-slate-800 text-slate-800 dark:text-slate-400 hover:cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800
+                border rounded-md text-sm h-[36px] p-2'
+                onClick={()=> setMapSelectorPopup(true)}>
+                    <FontAwesomeIcon icon={faEllipsisVertical} className='text-lg pr-3 text-green-500 hover:text-green-600'/>Map Selector
+                </button>
+                <FontAwesomeIcon icon={faGaugeHigh} flip={gameSpeed === 200 ? 'horizontal' : undefined} onClick={()=> setGameSpeed(gameSpeed === 200 ? 100 : 200)} className='border dark:border-slate-800 rounded-md w-10 p-2 text-lg hover:cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800 text-purple-500 hover:text-purple-600'/>
+            </div>
             <div className='border-x dark:border-slate-800 p-2 text-slate-300 h-60 overflow-auto scroll-smooth'>
                 <ul className='grid grid-cols-4 items-center gap-1 w-[18rem]'>
                     {list.map((item, index) => (
