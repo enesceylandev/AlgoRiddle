@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShuttleSpace, faStar } from '@fortawesome/free-solid-svg-icons';
+import { faExpand, faShuttleSpace, faStar } from '@fortawesome/free-solid-svg-icons';
 import { playground } from './maps';
 
 type Props = {
@@ -11,9 +11,29 @@ type Props = {
         required?: boolean;
     }[];
     setRequiredRef: React.Dispatch<React.SetStateAction<Props['requiredRef']>>;
+
+    selectedMap: {
+        ruleset: {
+            control: string[],
+            color: string[],
+            functions: { name: string; args: number }[];
+        },
+        player: {
+            spawn: number[],
+            direction: string,
+        },
+        board: {
+            cord: number[],
+            color: string,
+            required?: true
+        }[]
+    }
+    setEditorMap?: React.Dispatch<React.SetStateAction<Props['selectedMap']>>;
+    selectedBlock?: number[][];
+    setSelectedBlock?: React.Dispatch<React.SetStateAction<number[][]>>;
 };
 
-const Play: React.FC<Props> = ({ player, requiredRef, setRequiredRef}) => {
+const Play: React.FC<Props> = ({ player, requiredRef, setRequiredRef, selectedMap, setEditorMap, selectedBlock, setSelectedBlock}) => {
     const gridSize = 18; // VisibleGrid (GridSize+2) ex. gridSize = 18 => 16x16 visible grid
     const opacityStep = 0.02;
     
@@ -73,12 +93,15 @@ const Play: React.FC<Props> = ({ player, requiredRef, setRequiredRef}) => {
 
 
                 row.push(
-                    <div key={`${x},${y}`} className={`flex items-center justify-center text-slate-100 dark:text-slate-100
-                    bg-${playground[0].board.some((item)=> item.cord[0] === x && item.cord[1] === y) ? 
-                    playground[0].board.find((item) => item.cord[0] === x && item.cord[1] === y)?.color : undefined}-500 `} style={style} 
-                    onClick={() => console.log(x + "," + y)}>
+                    <div key={`${x},${y}`} className={`flex items-center justify-center text-slate-100 dark:text-slate-100 
+                    bg-${selectedMap.board.some((item)=> item.cord[0] === x && item.cord[1] === y) ? 
+                    selectedMap.board.find((item) => item.cord[0] === x && item.cord[1] === y)?.color : undefined}-500 `} style={style} 
+                    onClick={() => setSelectedBlock && selectedBlock &&
+                        selectedBlock.some(item => item[0] === x && item[1] === y) ? setSelectedBlock(selectedBlock.filter(item => item[0] !== x || item[1] !== y)) :
+                        setSelectedBlock && setSelectedBlock(selectedBlock ? [...selectedBlock, [x,y]] : [[x,y]])} >
                         {generateIcon(x,y)}
                         {/* {x},{y} */}
+                        {selectedBlock && selectedBlock.some(item => item[0] === x && item[1] === y) && <FontAwesomeIcon icon={faExpand} className='flex items-center justify-center'/>}
                     </div>
                 );
             }

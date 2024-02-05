@@ -6,6 +6,7 @@ import Landing from './components/out/Landing/Landing';
 import About from './components/out/About/About';
 import Footer from './components/Global/Footer';
 import Play from './components/in/Play';
+import Editor from './components/in/Editor';
 
 function App() {
   const location = useLocation();
@@ -27,6 +28,7 @@ function App() {
         <Route path='/' element={<Landing />} />
         <Route path='/about' element={<About />} />
         <Route path='/play' element={<Play/>} />
+        <Route path='/editor' element={<Editor/>} />
       </Routes>
       <Footer/>
     </div>

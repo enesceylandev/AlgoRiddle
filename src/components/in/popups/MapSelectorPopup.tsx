@@ -3,6 +3,7 @@ import { faFaceSmile, faStar } from '@fortawesome/free-regular-svg-icons';
 import { faArrowUpRightDots, faCrown, faCubes, faDoorClosed, faDoorOpen } from '@fortawesome/free-solid-svg-icons';
 
 import React from 'react'
+import { Link } from 'react-router-dom';
 
 type Props= {
     setMapSelectorPopup: React.Dispatch<React.SetStateAction<boolean>>;
@@ -47,10 +48,11 @@ const MapSelectorPopup: React.FC<Props> = ({setMapSelectorPopup}) => {
                     <FontAwesomeIcon icon={input.length >= 1 ? faDoorOpen : faDoorClosed}/>
                 </button>
             </div>
-            <button className='w-full h-10 bg-green-600 hover:bg-green-500 text-white rounded-md transition-all shadow-md dark:shadow-none'>
+            <Link to='/editor' 
+            className='w-full flex items-center justify-center h-10 bg-green-600 hover:bg-green-500 text-white rounded-md transition-all shadow-md dark:shadow-none'>
                 <FontAwesomeIcon icon={faCubes} className='mr-2 -ml-2'/>
                 <span>Create Custom Map</span>
-            </button>
+            </Link>
         </div>
     </div>
   )
