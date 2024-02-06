@@ -1,4 +1,4 @@
-import { faEllipsisVertical, faGauge, faGaugeHigh, faPlay, faReply, faRotateRight, faShare, faStop, faUpLong } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisVertical, faGauge, faGaugeHigh, faPlay, faReply, faRightFromBracket, faRotateRight, faShare, faStop, faUpLong } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect } from 'react';
 import cloneDeep from 'lodash/cloneDeep';
@@ -21,6 +21,24 @@ type Props = {
     setPlayer: React.Dispatch<React.SetStateAction<{ cords: number[]; direction: string | undefined; }>>;
     setRequiredRef: React.Dispatch<React.SetStateAction<Props['requiredRef']>>;
     setMapSelectorPopup: React.Dispatch<React.SetStateAction<boolean>>
+    preview?: boolean;
+    setPreview?: React.Dispatch<React.SetStateAction<boolean>>;
+    selectedMap: {
+        ruleset: {
+            control: string[],
+            color: string[],
+            functions: { name: string; args: number }[];
+        },
+        player: {
+            spawn: number[],
+            direction: string,
+        },
+        board: {
+            cord: number[],
+            color: string,
+            required?: true
+        }[]
+    }
 };
 
 const whichIcon = (direction: string) => {
@@ -75,22 +93,9 @@ const calcCords = (item: string, playerRef: any) => {
             return cords;
     }
 }
-const checkBlock = (playerRef: any, color: string) => {
-    if(color.includes("-")){
-    const splitColor = color.split("-")[0];
-    const matchingColorLocation = playground[0].board.find(select =>
-        select.cord[0] === playerRef.cords[0] && select.cord[1] === playerRef.cords[1] && select.color === splitColor);
-        return !!matchingColorLocation
-    } else {
-        return true
-    }
-}
-const isValid = (x:number, y:number) => {
-    return (playground[0].board.some((select) => select.cord[0] === x && select.cord[1] === y))
-}
 
 
-const NotationList: React.FC<Props> = ({ notation, list, setList, iterationRef, player, setPlayer, requiredRef, setRequiredRef, setMapSelectorPopup }) => {
+const NotationList: React.FC<Props> = ({ notation, list, setList, iterationRef, player, setPlayer, requiredRef, setRequiredRef, selectedMap, setMapSelectorPopup, preview, setPreview }) => {
     const [gameSpeed, setGameSpeed] = React.useState<number>(200);
 
     useEffect(() => {
@@ -144,12 +149,12 @@ const NotationList: React.FC<Props> = ({ notation, list, setList, iterationRef, 
         }
 
         if (list.length === 0) {
-            const [cords, direction] = [playground[0].player.spawn, playground[0].player.direction]
+            const [cords, direction] = [selectedMap.player.spawn, selectedMap.player.direction]
             setPlayer({ cords, direction });
 
         } else if (lastAction.includes("-")) {
             const color = lastAction.split("-")[0];
-            const matchingColorLocation = playground[0].board.find(select =>
+            const matchingColorLocation = selectedMap.board.find(select =>
                 select.cord[0] === player.cords[0] && select.cord[1] === player.cords[1] && select.color === color);
             if (!!matchingColorLocation) {
                 // const action = calcTurn(player.direction, lastAction.split("-")[1]);
@@ -216,7 +221,7 @@ const NotationList: React.FC<Props> = ({ notation, list, setList, iterationRef, 
     
     const movePlayer = (x:number,y:number) => {
         !isValid(player.cords[0] + x, player.cords[1] + y) && (iterationRef.current += 1);
-        // console.log(playground[0].board.find(select => select.cord[0] === player.cords[0] + x && select.cord[1] === player.cords[1] + y))
+        // console.log(selectedMap.board.find(select => select.cord[0] === player.cords[0] + x && select.cord[1] === player.cords[1] + y))
         setPlayer((prevPlayer) => ({ ...prevPlayer, cords: [prevPlayer.cords[0] + x, prevPlayer.cords[1] + y] }));
     } 
     const turnPlayer = (direction: string) => {
@@ -266,22 +271,48 @@ const NotationList: React.FC<Props> = ({ notation, list, setList, iterationRef, 
                 ReadNotation(0, player, notation);
             }, 100)
         }else{
-            setRequiredRef(playground[0].board.filter((item) => item.required === true));
+            setRequiredRef(selectedMap.board.filter((item) => item.required === true));
         }
         if(status !== "stop"){
             setList([]);
         }
     }
 
+    const checkBlock = (playerRef: any, color: string) => {
+        if(color.includes("-")){
+        const splitColor = color.split("-")[0];
+        const matchingColorLocation = selectedMap.board.find(select =>
+            select.cord[0] === playerRef.cords[0] && select.cord[1] === playerRef.cords[1] && select.color === splitColor);
+            return !!matchingColorLocation
+        } else {
+            return true
+        }
+    }
+    const isValid = (x:number, y:number) => {
+        return (selectedMap.board.some((select) => select.cord[0] === x && select.cord[1] === y))
+    }
+    
+
     return (
         <div className='z-20'>
             <div className='border-x border-t rounded-t-md dark:border-slate-800 p-2 justify-between flex rounded-b-md'>
-                <button className='dark:border-slate-800 text-slate-800 dark:text-slate-400 hover:cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800
-                border rounded-md text-sm h-[36px] p-2'
-                onClick={()=> setMapSelectorPopup(true)}>
-                    <FontAwesomeIcon icon={faEllipsisVertical} className='text-lg pr-3 text-green-500 hover:text-green-600'/>Map Selector
-                </button>
-                <FontAwesomeIcon icon={faGaugeHigh} flip={gameSpeed === 200 ? 'horizontal' : undefined} onClick={()=> setGameSpeed(gameSpeed === 200 ? 100 : 200)} className='border dark:border-slate-800 rounded-md w-10 p-2 text-lg hover:cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800 text-purple-500 hover:text-purple-600'/>
+                {!preview ? 
+                    <button className='dark:border-slate-800 text-slate-800 dark:text-slate-400 hover:cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800
+                    border rounded-md text-sm h-[36px] p-2'
+                    onClick={()=> setMapSelectorPopup(true)}>
+                        <FontAwesomeIcon icon={faEllipsisVertical} className='text-lg pr-3 text-green-500 hover:text-green-600'/>Map Selector
+                    </button>
+                :
+                    <button className='dark:border-slate-800 text-slate-800 dark:text-slate-400 hover:cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800
+                    border rounded-md text-sm h-[36px] p-2'
+                    onClick={()=> setPreview && setPreview(false)}> 
+                        <FontAwesomeIcon icon={faRightFromBracket} className='text-lg pr-3 text-red-500 hover:text-red-600'/>Back to Editor                  
+                    </button>
+                }
+                <FontAwesomeIcon icon={faGaugeHigh} flip={gameSpeed === 200 ? 'horizontal' : undefined} 
+                onClick={()=> setGameSpeed(gameSpeed === 200 ? 100 : 200)} 
+                className='border dark:border-slate-800 rounded-md w-10 p-2 text-lg hover:cursor-pointer
+                 hover:bg-gray-50 dark:hover:bg-slate-800 text-purple-500 hover:text-purple-600'/>
             </div>
             <div className='border-x dark:border-slate-800 p-2 text-slate-300 h-60 overflow-auto scroll-smooth'>
                 <ul className='grid grid-cols-4 items-center gap-1 w-[18rem]'>

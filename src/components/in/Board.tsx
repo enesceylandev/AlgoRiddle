@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExpand, faShuttleSpace, faStar } from '@fortawesome/free-solid-svg-icons';
 import { playground } from './maps';
@@ -28,42 +28,42 @@ type Props = {
             required?: true
         }[]
     }
+    preview?: boolean
     setEditorMap?: React.Dispatch<React.SetStateAction<Props['selectedMap']>>;
     selectedBlock?: number[][];
     setSelectedBlock?: React.Dispatch<React.SetStateAction<number[][]>>;
 };
 
-const Play: React.FC<Props> = ({ player, requiredRef, setRequiredRef, selectedMap, setEditorMap, selectedBlock, setSelectedBlock}) => {
+const Play: React.FC<Props> = ({ player, requiredRef, setRequiredRef, selectedMap, setEditorMap, selectedBlock, setSelectedBlock, preview }) => {
     const gridSize = 18; // VisibleGrid (GridSize+2) ex. gridSize = 18 => 16x16 visible grid
     const opacityStep = 0.02;
-    
-    useEffect(()=> {
-        if(requiredRef !== undefined && requiredRef.length > 0){
+
+    useEffect(() => {
+        if (requiredRef !== undefined && requiredRef.length > 0) {
             if (player.cords[0] === requiredRef[0].cord[0] && player.cords[1] === requiredRef[0].cord[1]) {
                 setRequiredRef(requiredRef.slice(1));
             }
-        }else{
-            console.log("You Win!");
+        }else if(selectedMap.board.some((item) => item.required === true)){
+            console.log('You win!');
         }
     }, [player, requiredRef])
 
-    const generateIcon = (x:number, y:number) => {
+    const generateIcon = (x: number, y: number) => {
         if (player.cords[0] === x && player.cords[1] === y) {
             switch (player.direction) {
                 case 'right':
                     return <FontAwesomeIcon icon={faShuttleSpace} className='rotate-0' />;
                 case 'left':
-                    return <FontAwesomeIcon icon={faShuttleSpace} className='rotate-180'/>;
+                    return <FontAwesomeIcon icon={faShuttleSpace} className='rotate-180' />;
                 case 'up':
-                    return <FontAwesomeIcon icon={faShuttleSpace} className='-rotate-90'/>;
+                    return <FontAwesomeIcon icon={faShuttleSpace} className='-rotate-90' />;
                 case 'down':
-                    return <FontAwesomeIcon icon={faShuttleSpace} className='rotate-90'/>;
+                    return <FontAwesomeIcon icon={faShuttleSpace} className='rotate-90' />;
                 default:
                     return null;
             }
-        }
-        else if(requiredRef.some((item)=> item.cord[0] === x && item.cord[1] === y)){
-            return <FontAwesomeIcon icon={faStar} className='text-white' />;
+        } else if (requiredRef.some((item) => item.cord[0] === x && item.cord[1] === y && item.required)) {
+            return <FontAwesomeIcon icon={faStar} className='text-white z-40' />;
         }
     }
 
@@ -83,7 +83,6 @@ const Play: React.FC<Props> = ({ player, requiredRef, setRequiredRef, selectedMa
                 const opacity = distanceToEdge * opacityStep;
 
                 const style = {
-                    // border: `1px solid rgba(${isValid(player.cords[0], player.cords[1]) ? `2, 131, 199, ${opacity}`:`245, 0, 0, ${opacity+0.02}`})`,
                     border: `1px solid rgba(2, 131, 199, ${opacity})`,
                     borderRadius: '5px',
                     width: cellSize,
@@ -94,14 +93,13 @@ const Play: React.FC<Props> = ({ player, requiredRef, setRequiredRef, selectedMa
 
                 row.push(
                     <div key={`${x},${y}`} className={`flex items-center justify-center text-slate-100 dark:text-slate-100 
-                    bg-${selectedMap.board.some((item)=> item.cord[0] === x && item.cord[1] === y) ? 
-                    selectedMap.board.find((item) => item.cord[0] === x && item.cord[1] === y)?.color : undefined}-500 `} style={style} 
-                    onClick={() => setSelectedBlock && selectedBlock &&
-                        selectedBlock.some(item => item[0] === x && item[1] === y) ? setSelectedBlock(selectedBlock.filter(item => item[0] !== x || item[1] !== y)) :
-                        setSelectedBlock && setSelectedBlock(selectedBlock ? [...selectedBlock, [x,y]] : [[x,y]])} >
-                        {generateIcon(x,y)}
-                        {/* {x},{y} */}
-                        {selectedBlock && selectedBlock.some(item => item[0] === x && item[1] === y) && <FontAwesomeIcon icon={faExpand} className='flex items-center justify-center'/>}
+                    bg-${selectedMap.board.some((item) => item.cord[0] === x && item.cord[1] === y) ?
+                            selectedMap.board.find((item) => item.cord[0] === x && item.cord[1] === y)?.color : undefined}-500 `} style={style}
+                        onClick={() => !preview && (setSelectedBlock && selectedBlock &&
+                            selectedBlock.some(item => item[0] === x && item[1] === y)) ? setSelectedBlock(selectedBlock.filter(item => item[0] !== x || item[1] !== y)) :
+                            !preview && setSelectedBlock && setSelectedBlock(selectedBlock ? [...selectedBlock, [x, y]] : [[x, y]])} >
+                        {generateIcon(x, y)}
+                        {selectedBlock && selectedBlock.some(item => item[0] === x && item[1] === y) && <FontAwesomeIcon icon={faExpand} className='flex items-center justify-center' />}
                     </div>
                 );
             }

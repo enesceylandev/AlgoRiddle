@@ -8,6 +8,22 @@ type Props = {
   selected: number[] | null;
   notation: string[][];
   setNotation: React.Dispatch<React.SetStateAction<string[][]>>
+  selectedMap: {
+    ruleset: {
+      control: string[],
+      color: string[],
+      functions: { name: string; args: number }[];
+    },
+    player: {
+      spawn: number[],
+      direction: string,
+    },
+    board: {
+      cord: number[],
+      color: string,
+      required?: true
+    }[]
+  }
 };
 type ControlButtonProps = {
   onClick: () => void;
@@ -21,7 +37,7 @@ type ColorButtonProps = {
   color: string;
 };
 
-const Controls: React.FC<Props> = ({ selected, notation, setNotation }) => {
+const Controls: React.FC<Props> = ({ selected, notation, setNotation, selectedMap }) => {
   const updateSelectedNotation = (newValue: string) => {
     if (selected !== null) {
         let selectedLayer = notation[selected[1]-1] || [];
@@ -34,11 +50,11 @@ const Controls: React.FC<Props> = ({ selected, notation, setNotation }) => {
         }
 
         let condution = null
-        if (playground[0].ruleset.color.includes(selectedLayer[selected[0]])){
+        if (selectedMap.ruleset.color.includes(selectedLayer[selected[0]])){
             condution = selectedLayer[selected[0]]
         }
 
-        if(condution !== null && (playground[0].ruleset.color.includes(selectedLayer[selected[0]]))){
+        if(condution !== null && (selectedMap.ruleset.color.includes(selectedLayer[selected[0]]))){
             newValue = condution + "-" + newValue
         }
         selectedLayer[selected[0]] = newValue;
@@ -70,54 +86,53 @@ const Controls: React.FC<Props> = ({ selected, notation, setNotation }) => {
       key={key}
       onClick={() => onClick(color)}
       className={`dark:border-slate-800 border p-1 w-9 h-9 
-      ${playground[0].ruleset.color[0] === color ? "rounded-t-md" :
-       playground[0].ruleset.color[playground[0].ruleset.color.length - 1] === color && "rounded-b-md"}`}
+      ${selectedMap.ruleset.color[0] === color ? "rounded-t-md" :
+       selectedMap.ruleset.color[selectedMap.ruleset.color.length - 1] === color && "rounded-b-md"}`}
     >
       <div className={`bg-${color}-500 w-full h-full rounded-md`} />
     </button>
   );
   
 
-  
   return (
     <div>
       <h1 className='font-semibold text-slate-900 dark:text-slate-300'>Commands</h1>
       <div className="flex">
         <div className="grid grid-cols-3 p-4">
           <ControlButton
-            onClick={() => playground[0].ruleset.control.includes("left") && updateSelectedNotation('left')}
-            active={playground[0].ruleset.control.includes("left")}
+            onClick={() => selectedMap.ruleset.control.includes("left") && updateSelectedNotation('left')}
+            active={selectedMap.ruleset.control.includes("left")}
             icon={faReply}
           />
           <ControlButton
-            onClick={() => playground[0].ruleset.control.includes("forward") && updateSelectedNotation('forward')}
-            active={playground[0].ruleset.control.includes("forward")}
+            onClick={() => selectedMap.ruleset.control.includes("forward") && updateSelectedNotation('forward')}
+            active={selectedMap.ruleset.control.includes("forward")}
             icon={faUpLong}
           />
           <ControlButton
-            onClick={() => playground[0].ruleset.control.includes("right") && updateSelectedNotation('right')}
-            active={playground[0].ruleset.control.includes("right")}
+            onClick={() => selectedMap.ruleset.control.includes("right") && updateSelectedNotation('right')}
+            active={selectedMap.ruleset.control.includes("right")}
             icon={faShare}
           />
           <ControlButton
-            onClick={() => playground[0].ruleset.functions.find((item) => item.name === "f0") && updateSelectedNotation('f0')}
-            active={!!playground[0].ruleset.functions.find((item) => item.name === "f0")}
+            onClick={() => selectedMap.ruleset.functions[0].args >= 1 && updateSelectedNotation('f0')}
+            active={selectedMap.ruleset.functions[0].args >= 1}
             text="f0"
           />
           <ControlButton
-            onClick={() => playground[0].ruleset.functions.find((item) => item.name === "f1") && updateSelectedNotation('f1')}
-            active={!!playground[0].ruleset.functions.find((item) => item.name === "f1")}
+            onClick={() => selectedMap.ruleset.functions[1].args >= 1 && updateSelectedNotation('f1')}
+            active={selectedMap.ruleset.functions[1].args >= 1}
             text="f1"
           />
           <ControlButton
-            onClick={() => playground[0].ruleset.functions.find((item) => item.name === "f2") && updateSelectedNotation('f2')}
-            active={!!playground[0].ruleset.functions.find((item) => item.name === "f2")}
+            onClick={() => selectedMap.ruleset.functions[2].args >= 1 && updateSelectedNotation('f2')}
+            active={selectedMap.ruleset.functions[2].args >= 1}
             text="f2"
           />
         </div>
 
         <div className="grid grid-cols-1 h-[10px]">
-          {playground[0].ruleset.color.map((item, index) => (
+          {selectedMap.ruleset.color.map((item, index) => (
             <ColorButton
               key={index}
               onClick={updateSelectedNotation}

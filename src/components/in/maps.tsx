@@ -19,7 +19,7 @@ export const playground: Map[] = [
         ruleset: {
             control: [ 'left', 'forward', 'right'],
             color: ['red', 'purple', 'blue'],
-            functions: [{ name: 'f0', args: 3 }, { name: 'f1', args: 3 }]
+            functions: [{ name: 'f0', args: 3 }, { name: 'f1', args: 3 }, { name: 'f2', args: 0 }]
         },
         player: {
             spawn: [2, 8],
