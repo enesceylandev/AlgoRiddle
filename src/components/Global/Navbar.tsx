@@ -9,7 +9,6 @@ const Navbar: React.FC = () => {
   
   // Theme
   const [theme, setTheme] = useState<string | null>("light")
-
   useEffect(()=> {
     if(window.matchMedia('(prefers-color-scheme: dark)').matches) {
       setTheme('dark')
@@ -26,8 +25,6 @@ const Navbar: React.FC = () => {
   const handleThemeSwitch = () => {
     theme === 'dark' ? setTheme('light') : setTheme('dark');
   }
-
-
 
   window.addEventListener('scroll', () => {
     if (window.scrollY > 10) {
@@ -53,21 +50,21 @@ const Navbar: React.FC = () => {
             </>
             : 
             <>
-            <div className='flex gap-5 p-2 font-semibold items-center'>
-              <div className='space-x-6'>
-                <Link to='/' className='dark:hover:text-white hover:text-gray-900'>Home</Link>
-                <Link to='/about' className='dark:hover:text-white hover:text-gray-900'>About</Link>
-                <Link to='/play' className='dark:hover:text-white hover:text-gray-900'>Play</Link>
+              <div className='flex gap-5 p-2 font-semibold items-center'>
+                <div className='space-x-6'>
+                  <Link to='/' className='dark:hover:text-white hover:text-gray-900'>Home</Link>
+                  <Link to='/about' className='dark:hover:text-white hover:text-gray-900'>About</Link>
+                  <Link to='/play' className='dark:hover:text-white hover:text-gray-900'>Play</Link>
+                </div>
+                <div className='space-x-2'>
+                  <button onClick={handleThemeSwitch} className='p-2 rounded-md dark:hover:bg-slate-800 hover:bg-gray-200'>
+                    <FontAwesomeIcon icon={faSun}/>
+                  </button>
+                  <a href={process.env.REACT_APP_REPO} target="_blank" rel="noreferrer" className='p-2 rounded-md dark:hover:bg-slate-800 hover:bg-gray-200'>
+                    <FontAwesomeIcon icon={faGithub}/>
+                  </a>
+                </div>
               </div>
-              <div className='space-x-2'>
-                <button onClick={handleThemeSwitch} className='p-2 rounded-md dark:hover:bg-slate-800 hover:bg-gray-200'>
-                  <FontAwesomeIcon icon={faSun}/>
-                </button>
-                <a href={process.env.REACT_APP_REPO} target="_blank" rel="noreferrer" className='p-2 rounded-md dark:hover:bg-slate-800 hover:bg-gray-200'>
-                  <FontAwesomeIcon icon={faGithub}/>
-                </a>
-              </div>
-            </div>
             </> 
             }
           </div>
@@ -84,7 +81,8 @@ const Navbar: React.FC = () => {
         onClick={()=> setMenu(!menu)} className='hover:text-slate-900 dark:hover:text-white'>
           Github
         </a>
-      </div> } 
+      </div> 
+    } 
     </div>
   )
 }

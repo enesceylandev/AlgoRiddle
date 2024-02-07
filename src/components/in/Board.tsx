@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExpand, faShuttleSpace, faStar } from '@fortawesome/free-solid-svg-icons';
-import { playground } from './maps';
 
 type Props = {
     player: { cords: number[], direction: string | undefined };
@@ -11,7 +10,6 @@ type Props = {
         required?: boolean;
     }[];
     setRequiredRef: React.Dispatch<React.SetStateAction<Props['requiredRef']>>;
-
     selectedMap: {
         ruleset: {
             control: string[],
@@ -50,38 +48,45 @@ const Play: React.FC<Props> = ({ player, requiredRef, setRequiredRef, selectedMa
 
     const generateIcon = (x: number, y: number) => {
         if (player.cords[0] === x && player.cords[1] === y) {
-            switch (player.direction) {
-                case 'right':
-                    return <FontAwesomeIcon icon={faShuttleSpace} className='rotate-0' />;
-                case 'left':
-                    return <FontAwesomeIcon icon={faShuttleSpace} className='rotate-180' />;
-                case 'up':
-                    return <FontAwesomeIcon icon={faShuttleSpace} className='-rotate-90' />;
-                case 'down':
-                    return <FontAwesomeIcon icon={faShuttleSpace} className='rotate-90' />;
-                default:
-                    return null;
-            }
-        } else if (requiredRef.some((item) => item.cord[0] === x && item.cord[1] === y && item.required)) {
+            const iconRotation: { [key: string]: string } = {
+                'right': 'rotate-0',
+                'left': 'rotate-180',
+                'up': '-rotate-90',
+                'down': 'rotate-90'
+            };
+            return <FontAwesomeIcon icon={faShuttleSpace} className={iconRotation[player.direction || '']} />;
+        } else if (requiredRef.some(item => item.cord[0] === x && item.cord[1] === y && item.required)) {
             return <FontAwesomeIcon icon={faStar} className='text-white z-40' />;
         }
-    }
+        return null;
+    };
 
+    const getBackgroundColor = (x:number, y:number) => {
+        const selectedColor = selectedMap.board.find(item => item.cord[0] === x && item.cord[1] === y)?.color;
+        return selectedColor || 'undefined';
+    };
+    const isBlockSelected = (x:number, y:number) => { return !preview && selectedBlock && selectedBlock.some(item => item[0] === x && item[1] === y)};
+    const handleBlockClick = (x:number, y:number) => {
+        if (!preview && setSelectedBlock && selectedBlock) {
+            if (isBlockSelected(x, y)) {
+                setSelectedBlock(selectedBlock.filter(item => item[0] !== x || item[1] !== y));
+            } else {
+                setSelectedBlock(selectedBlock ? [...selectedBlock, [x, y]] : [[x, y]]);
+            }
+        }
+    };
     const renderGrid = () => {
         const grid = [];
-
         const cellSize = 35;
         const margin = 3;
 
         for (let y = 0; y < gridSize; y++) {
             const row = [];
-
             for (let x = 0; x < gridSize; x++) {
                 const distanceToEdgeX = Math.min(x, gridSize - 1 - x);
                 const distanceToEdgeY = Math.min(y, gridSize - 1 - y);
                 const distanceToEdge = Math.min(distanceToEdgeX, distanceToEdgeY);
                 const opacity = distanceToEdge * opacityStep;
-
                 const style = {
                     border: `1px solid rgba(2, 131, 199, ${opacity})`,
                     borderRadius: '5px',
@@ -89,24 +94,19 @@ const Play: React.FC<Props> = ({ player, requiredRef, setRequiredRef, selectedMa
                     height: cellSize,
                     margin: `${margin}px`
                 };
-
-
                 row.push(
-                    <div key={`${x},${y}`} className={`flex items-center justify-center text-slate-100 dark:text-slate-100 
-                    bg-${selectedMap.board.some((item) => item.cord[0] === x && item.cord[1] === y) ?
-                            selectedMap.board.find((item) => item.cord[0] === x && item.cord[1] === y)?.color : undefined}-500 `} style={style}
-                        onClick={() => !preview && (setSelectedBlock && selectedBlock &&
-                            selectedBlock.some(item => item[0] === x && item[1] === y)) ? setSelectedBlock(selectedBlock.filter(item => item[0] !== x || item[1] !== y)) :
-                            !preview && setSelectedBlock && setSelectedBlock(selectedBlock ? [...selectedBlock, [x, y]] : [[x, y]])} >
+                    <div 
+                        key={`${x},${y}`} 
+                        className={`flex items-center justify-center text-slate-100 dark:text-slate-100 bg-${getBackgroundColor(x, y)}-500`} 
+                        style={style}
+                        onClick={() => handleBlockClick(x, y)}>
                         {generateIcon(x, y)}
-                        {selectedBlock && selectedBlock.some(item => item[0] === x && item[1] === y) && <FontAwesomeIcon icon={faExpand} className='flex items-center justify-center' />}
+                        {isBlockSelected(x, y) && <FontAwesomeIcon icon={faExpand} className='flex items-center justify-center' />}
                     </div>
                 );
             }
-
             grid.push(<div key={y} style={{ display: 'flex' }}>{row}</div>);
         }
-
         return grid;
     };
 

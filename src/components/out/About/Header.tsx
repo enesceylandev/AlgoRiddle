@@ -12,7 +12,6 @@ const Header: React.FC = () => {
             <span className='font-semibold dark:text-slate-300 text-slate-700'> ideal environment to hone your skills </span>with its accessible and user-friendly interface.
         </p>
     </div>
-    
   )
 }
 

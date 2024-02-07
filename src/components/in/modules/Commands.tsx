@@ -2,7 +2,6 @@ import { faBan, faReply, faShare, faUpLong } from '@fortawesome/free-solid-svg-i
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import React from 'react';
-import { playground } from '../maps';
 
 type Props = {
   selected: number[] | null;
@@ -41,27 +40,20 @@ const Controls: React.FC<Props> = ({ selected, notation, setNotation, selectedMa
   const updateSelectedNotation = (newValue: string) => {
     if (selected !== null) {
         let selectedLayer = notation[selected[1]-1] || [];
-        
         const layerLength = selectedLayer.length;
         const missingSlots = selected[0] - layerLength + 1;
-
-        if (missingSlots > 0) {
-        selectedLayer = selectedLayer.concat(new Array(missingSlots).fill(undefined));
-        }
-
+        // If the selected layer is shorter than the selected slot, fill the missing slots with undefined
+        if (missingSlots > 0) { selectedLayer = selectedLayer.concat(new Array(missingSlots).fill(undefined)) }
+        // Check if there is a condition already set for the selected slot
         let condution = null
-        if (selectedMap.ruleset.color.includes(selectedLayer[selected[0]])){
-            condution = selectedLayer[selected[0]]
-        }
-
-        if(condution !== null && (selectedMap.ruleset.color.includes(selectedLayer[selected[0]]))){
-            newValue = condution + "-" + newValue
-        }
+        if (selectedMap.ruleset.color.includes(selectedLayer[selected[0]])){ condution = selectedLayer[selected[0]] }
+        // If there is a condition and the selected color is part of the ruleset, append the new value to the condition
+        if(condution !== null && (selectedMap.ruleset.color.includes(selectedLayer[selected[0]]))){ newValue = condution + "-" + newValue }
         selectedLayer[selected[0]] = newValue;
         setNotation((prev) => {
-        const updatedTest = [...prev];
-        updatedTest[selected[1]-1] = selectedLayer;
-        return updatedTest;
+        const updatedPart = [...prev];
+        updatedPart[selected[1]-1] = selectedLayer;
+        return updatedPart;
         });
     }
   };
@@ -69,12 +61,12 @@ const Controls: React.FC<Props> = ({ selected, notation, setNotation, selectedMa
 
   const ControlButton:React.FC<ControlButtonProps> = ({ onClick, text, active, icon }) => (
     <button
-    onClick={onClick}
-    className={`dark:border-slate-800 flex items-center justify-center p-2 h-[40px] border 
-    ${icon ? (icon === faReply ? "rounded-tl-md" : icon === faShare && "rounded-tr-md") :
-     text === "f0" ? "rounded-bl-md" : text === "f2" && "rounded-br-md"}
-    ${active ? 'text-slate-900 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' : 'text-slate-600 dark:text-slate-500 cursor-auto'}`}
-  >
+      onClick={onClick}
+      className={`dark:border-slate-800 flex items-center justify-center p-2 h-[40px] border 
+      ${icon ? (icon === faReply ? "rounded-tl-md" : icon === faShare && "rounded-tr-md") :
+       text === "f0" ? "rounded-bl-md" : text === "f2" && "rounded-br-md"}
+      ${active ? 'text-slate-900 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' : 'text-slate-600 dark:text-slate-500 cursor-auto'}`}
+    >
     {icon && <FontAwesomeIcon icon={active ? icon : faBan} />}
     {text && <h1>{active ? text : <FontAwesomeIcon icon={faBan}/>}</h1>}
   </button>

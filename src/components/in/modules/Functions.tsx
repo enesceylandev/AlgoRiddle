@@ -1,7 +1,6 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faReply, faShare, faUpLong } from '@fortawesome/free-solid-svg-icons'
-import { playground } from '../maps'
 
 type Props = {
     selected: number[] | null,
@@ -26,17 +25,12 @@ type Props = {
 }
 
 const Functions: React.FC<Props> = ({selected, setSelected, notation, selectedMap}) => {
-    
     const whichIcon = (direction: string) => {
         switch (direction) {
-            case "left":
-                return faReply
-            case "right":
-                return faShare
-            case "forward":
-                return faUpLong
-            default:
-                return faReply
+            case "left": return faReply
+            case "right": return faShare
+            case "forward": return faUpLong
+            default: return faReply
         }
     }
     const renderNotionButtons = (layer: number,numTests: number) => {
@@ -55,9 +49,7 @@ const Functions: React.FC<Props> = ({selected, setSelected, notation, selectedMa
                             setSelected([i, layer])
                     }
                 >
-                    {/* Showing icon/color/function number */}
-                    
-                    
+                {/* Showing icon/color/function number */}                    
                     {/* direction */}
                     {notation[layer - 1] && notation[layer - 1][i] && (notation[layer -1][i] === "left" || notation[layer - 1][i] === "right" || notation[layer - 1][i] === "forward") ? (
                         <FontAwesomeIcon icon={whichIcon(notation[layer - 1][i])} />    

@@ -28,14 +28,13 @@ const Play: React.FC = () => {
     <div className='flex items-center'>
       <img src='https://tailwindcss.com/_next/static/media/docs@30.8b9a76a2.avif' alt="" className='dark:blur-xl opacity-50 absolute top-0 left-0 overflow-hidden select-none -z-0'/>
         <div className='flex flex-col space-y-12 z-20'>
-          <Functions selectedMap={playground[0]} selected={selected} setSelected={setSelected} notation={notation}/>
-          <Commands selectedMap={playground[0]} selected={selected} notation={notation} setNotation={setNotation}/>
+          <Functions {...{selectedMap: playground[0], selected, setSelected, notation}} />
+          <Commands {...{selectedMap: playground[0], selected, notation, setNotation}} />
         </div>
-        <Board player={player} requiredRef={requiredRef} setRequiredRef={setRequiredRef} selectedMap={playground[0]}/>
-        <NotationList notation={notation} list={list} setList={setList} iterationRef={iterationRef} 
-        player={player} setPlayer={setPlayer} requiredRef={requiredRef} setRequiredRef={setRequiredRef} selectedMap={playground[0]} setMapSelectorPopup={setMapSelectorPopup}/>
+        <Board {...{player, requiredRef, setRequiredRef, selectedMap: playground[0]}} />
+        <NotationList {...{notation, list, setList, iterationRef, player, setPlayer, requiredRef, setRequiredRef, selectedMap: playground[0], setMapSelectorPopup}} />
     </div>
-    {mapSelectorPopup && <MapSelectorPopup setMapSelectorPopup={setMapSelectorPopup}/>}
+    {mapSelectorPopup && <MapSelectorPopup {...{setMapSelectorPopup}} />}
     </>
   )
 }
