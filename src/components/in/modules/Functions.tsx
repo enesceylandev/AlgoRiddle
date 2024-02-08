@@ -2,26 +2,27 @@ import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faReply, faShare, faUpLong } from '@fortawesome/free-solid-svg-icons'
 
+type Map = {
+    ruleset: {
+      control: string[];
+      color: string[];
+      functions: { name: string; args: number }[];
+    },
+    player: {
+      spawn: number[];
+      direction: string,
+    },
+    board: {
+      cord: number[];
+      color: string;
+      required?: boolean
+    }[]
+  }
 type Props = {
     selected: number[] | null,
     setSelected: React.Dispatch<React.SetStateAction<number[] | null>>
     notation: string[][]
-    selectedMap: {
-        ruleset: {
-            control: string[],
-            color: string[],
-            functions: { name: string; args: number }[];
-        },
-        player: {
-            spawn: number[],
-            direction: string,
-        },
-        board: {
-            cord: number[],
-            color: string,
-            required?: true
-        }[]
-    }
+    selectedMap: Map
 }
 
 const Functions: React.FC<Props> = ({selected, setSelected, notation, selectedMap}) => {

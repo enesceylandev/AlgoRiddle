@@ -1,14 +1,33 @@
+import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faFaceSmile, faStar } from '@fortawesome/free-regular-svg-icons';
 import { faArrowUpRightDots, faCrown, faCubes, faDoorClosed, faDoorOpen } from '@fortawesome/free-solid-svg-icons';
-
-import React from 'react'
 import { Link } from 'react-router-dom';
+import CryptoJS from 'crypto-js';
 
-type Props= { setMapSelectorPopup: React.Dispatch<React.SetStateAction<boolean>> }
+type Map = {
+    ruleset: {
+      control: string[];
+      color: string[];
+      functions: { name: string; args: number }[];
+    },
+    player: {
+      spawn: number[];
+      direction: string,
+    },
+    board: {
+      cord: number[];
+      color: string;
+      required?: boolean
+    }[]
+}
+type Props= { 
+  setMapSelectorPopup: React.Dispatch<React.SetStateAction<boolean>>
+  setSelectedMap: React.Dispatch<React.SetStateAction<Map>>
+}
 
-const MapSelectorPopup: React.FC<Props> = ({ setMapSelectorPopup }) => {
+const MapSelectorPopup: React.FC<Props> = ({ setMapSelectorPopup, setSelectedMap }) => {
     const [input, setInput] = React.useState<string>(''); // map code
   
     const renderButton = (text: string, icon: IconDefinition, iconColor: string) => (
@@ -18,6 +37,17 @@ const MapSelectorPopup: React.FC<Props> = ({ setMapSelectorPopup }) => {
       </button>
     );
   
+    const joinMap = (input: string) => {
+      console.log("test")
+      try {
+        const originalText = input;
+        const key = "ultraSecretKey";
+        const decryptedMessage = CryptoJS.AES.decrypt(originalText, key).toString(CryptoJS.enc.Utf8);
+        setSelectedMap(JSON.parse(decryptedMessage));
+      } catch (error) {
+        console.log(error)
+      }
+    };
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" onClick={() => setMapSelectorPopup(false)}>
         <div className="relative bg-[#F7F7FC] dark:bg-[#212529] p-4 rounded-xl shadow-md mx-5" onClick={(e) => e.stopPropagation()}>
@@ -40,8 +70,8 @@ const MapSelectorPopup: React.FC<Props> = ({ setMapSelectorPopup }) => {
               placeholder='Enter the map code' />
   
             <button
-              onClick={() => setMapSelectorPopup(input.length >= 1)}
-              className={`w-full h-10 rounded-md mb-3 transition-all ${input.length >= 1 ? 'bg-green-600 hover:bg-green-500 cursor-pointer' : 'bg-gray-500 cursor-auto'}  text-white`}>
+              onClick={() => input.length >= 1 && joinMap(input)}
+              className={`w-full h-10 shadow-md rounded-md mb-3 transition-all ${input.length >= 1 ? 'bg-green-600 hover:bg-green-500 cursor-pointer' : 'bg-gray-500 cursor-auto'}  text-white`}>
               <FontAwesomeIcon icon={input.length >= 1 ? faDoorOpen : faDoorClosed} />
             </button>
           </div>

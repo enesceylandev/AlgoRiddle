@@ -1,7 +1,24 @@
 import React, { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExpand, faShuttleSpace, faStar } from '@fortawesome/free-solid-svg-icons';
+import CryptoJS from 'crypto-js';
 
+type Map = {
+    ruleset: {
+      control: string[];
+      color: string[];
+      functions: { name: string; args: number }[];
+    },
+    player: {
+      spawn: number[];
+      direction: string,
+    },
+    board: {
+      cord: number[];
+      color: string;
+      required?: boolean
+    }[]
+  }
 type Props = {
     player: { cords: number[], direction: string | undefined };
     requiredRef: {
@@ -10,29 +27,13 @@ type Props = {
         required?: boolean;
     }[];
     setRequiredRef: React.Dispatch<React.SetStateAction<Props['requiredRef']>>;
-    selectedMap: {
-        ruleset: {
-            control: string[],
-            color: string[],
-            functions: { name: string; args: number }[];
-        },
-        player: {
-            spawn: number[],
-            direction: string,
-        },
-        board: {
-            cord: number[],
-            color: string,
-            required?: true
-        }[]
-    }
+    selectedMap: Map;
     preview?: boolean
-    setEditorMap?: React.Dispatch<React.SetStateAction<Props['selectedMap']>>;
     selectedBlock?: number[][];
     setSelectedBlock?: React.Dispatch<React.SetStateAction<number[][]>>;
 };
 
-const Play: React.FC<Props> = ({ player, requiredRef, setRequiredRef, selectedMap, setEditorMap, selectedBlock, setSelectedBlock, preview }) => {
+const Play: React.FC<Props> = ({ player, requiredRef, setRequiredRef, selectedMap, selectedBlock, setSelectedBlock, preview }) => {
     const gridSize = 18; // VisibleGrid (GridSize+2) ex. gridSize = 18 => 16x16 visible grid
     const opacityStep = 0.02;
 
@@ -42,7 +43,14 @@ const Play: React.FC<Props> = ({ player, requiredRef, setRequiredRef, selectedMa
                 setRequiredRef(requiredRef.slice(1));
             }
         }else if(selectedMap.board.some((item) => item.required === true)){
-            console.log('You win!');
+            if(!preview){
+                console.log("you win!");
+            }else{
+                const originalText = JSON.stringify(selectedMap);
+                const key = "ultraSecretKey";
+                const encryptedMessage = CryptoJS.AES.encrypt(originalText, key).toString();
+                console.log(encryptedMessage);            
+            }
         }
     }, [player, requiredRef])
 

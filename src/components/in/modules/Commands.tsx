@@ -3,32 +3,33 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import React from 'react';
 
+type Map = {
+  ruleset: {
+    control: string[];
+    color: string[];
+    functions: { name: string; args: number }[];
+  },
+  player: {
+    spawn: number[];
+    direction: string,
+  },
+  board: {
+    cord: number[];
+    color: string;
+    required?: boolean
+  }[]
+}
 type Props = {
   selected: number[] | null;
   notation: string[][];
-  setNotation: React.Dispatch<React.SetStateAction<string[][]>>
-  selectedMap: {
-    ruleset: {
-      control: string[],
-      color: string[],
-      functions: { name: string; args: number }[];
-    },
-    player: {
-      spawn: number[],
-      direction: string,
-    },
-    board: {
-      cord: number[],
-      color: string,
-      required?: true
-    }[]
-  }
+  setNotation: React.Dispatch<React.SetStateAction<string[][]>>;
+  selectedMap: Map
 };
 type ControlButtonProps = {
   onClick: () => void;
   text?: string;
   active: boolean;
-  icon?: IconDefinition;
+  icon?: IconDefinition
 };
 type ColorButtonProps = {
   key: number;
