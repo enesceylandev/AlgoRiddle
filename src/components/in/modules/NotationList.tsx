@@ -36,22 +36,7 @@ type Props = {
     setMapSelectorPopup?: React.Dispatch<React.SetStateAction<boolean>>;
     preview?: boolean;
     setPreview?: React.Dispatch<React.SetStateAction<boolean>>;
-    selectedMap: {
-        ruleset: {
-            control: string[];
-            color: string[];
-            functions: { name: string; args: number }[];
-        };
-        player: {
-            spawn: number[];
-            direction: string;
-        };
-        board: {
-            cord: number[];
-            color: string;
-            required?: true;
-        }[];
-    };
+    selectedMap: Map
 };
 
 const whichIcon = (direction: string) => {

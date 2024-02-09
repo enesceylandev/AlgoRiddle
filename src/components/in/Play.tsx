@@ -55,7 +55,7 @@ const Play: React.FC = () => {
           <Commands {...{selectedMap, selected, notation, setNotation}} />
         </div>
         <Board {...{player, requiredRef, setRequiredRef, selectedMap}} />
-        <NotationList {...{notation, list, setList, iterationRef, player, setPlayer, requiredRef, setRequiredRef, selectedMap: playground[0], setMapSelectorPopup}} />
+        <NotationList {...{notation, list, setList, iterationRef, player, setPlayer, requiredRef, setRequiredRef, selectedMap, setMapSelectorPopup}} />
     </div>
     {mapSelectorPopup && <MapSelectorPopup {...{setMapSelectorPopup, setSelectedMap}} />}
     </>

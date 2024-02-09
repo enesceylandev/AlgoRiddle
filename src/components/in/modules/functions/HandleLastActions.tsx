@@ -19,7 +19,7 @@ type Props = {
         board: {
             cord: number[];
             color: string;
-            required?: true | undefined;
+            required?: boolean | undefined;
         }[];
     };
     player: {
