@@ -1,4 +1,4 @@
-type Map = {
+export type Map = {
     ruleset: {
         control: string[],
         color: string[],
@@ -8,12 +8,14 @@ type Map = {
         spawn: number[],
         direction: string,
     },
+    solution: string[],
     board: {
         cord: number[],
         color: string,
         required?: true
     }[]
 }
+
 export const playground: Map[] = [
     {
         ruleset: {
@@ -25,6 +27,7 @@ export const playground: Map[] = [
             spawn: [2, 8],
             direction: 'right'
         },
+        solution: ["forward","blue-f0","f1","forward","blue-left","f1"],
         board: [
             {
                 cord: [2, 8],
@@ -89,6 +92,7 @@ export const playground: Map[] = [
             spawn: [10, 3],
             direction: 'down'
         },
+        solution: [],
         board: [
             {
                 cord: [10, 3],
@@ -191,6 +195,7 @@ export const playground: Map[] = [
             spawn: [2, 10],
             direction: 'right'
         },
+        solution: [],
         board: [
             {
                 cord: [2, 10],
@@ -278,6 +283,7 @@ export const playground: Map[] = [
             spawn: [4, 5],
             direction: 'right'
         },
+        solution: [],
         board: [
             {
                 cord: [4, 5],

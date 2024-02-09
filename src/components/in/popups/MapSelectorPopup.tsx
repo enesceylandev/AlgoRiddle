@@ -5,23 +5,8 @@ import { faFaceSmile, faStar } from '@fortawesome/free-regular-svg-icons';
 import { faArrowUpRightDots, faCrown, faCubes, faDoorClosed, faDoorOpen } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import CryptoJS from 'crypto-js';
+import { Map } from '../maps';
 
-type Map = {
-    ruleset: {
-      control: string[];
-      color: string[];
-      functions: { name: string; args: number }[];
-    },
-    player: {
-      spawn: number[];
-      direction: string,
-    },
-    board: {
-      cord: number[];
-      color: string;
-      required?: boolean
-    }[]
-}
 type Props= { 
   setMapSelectorPopup: React.Dispatch<React.SetStateAction<boolean>>
   setSelectedMap: React.Dispatch<React.SetStateAction<Map>>

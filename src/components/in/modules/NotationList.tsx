@@ -3,24 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect } from 'react';
 import cloneDeep from 'lodash/cloneDeep';
 import HandleLastActions from './functions/HandleLastActions';
-import { playground } from '../maps'
+import { playground, Map } from '../maps'
 
-type Map = {
-    ruleset: {
-      control: string[];
-      color: string[];
-      functions: { name: string; args: number }[];
-    },
-    player: {
-      spawn: number[];
-      direction: string,
-    },
-    board: {
-      cord: number[];
-      color: string;
-      required?: boolean
-    }[]
-  }
+
 type Props = {
     notation: string[][];
     list: string[];

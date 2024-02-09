@@ -3,25 +3,9 @@ import Board from './Board'
 import Commands from './modules/Commands'
 import NotationList from './modules/NotationList'
 import Functions from './modules/Functions'
-import { playground } from './maps'
+import { playground, Map } from './maps'
 import MapSelectorPopup from './popups/MapSelectorPopup'
 
-type Map = {
-  ruleset: {
-    control: string[];
-    color: string[];
-    functions: { name: string; args: number }[];
-  },
-  player: {
-    spawn: number[];
-    direction: string,
-  },
-  board: {
-    cord: number[];
-    color: string;
-    required?: boolean
-  }[]
-}
 type requiredRef = {
   cord: number[];
   color: string;
@@ -59,7 +43,7 @@ const Play: React.FC = () => {
           <Functions {...{selectedMap, selected, setSelected, notation}} />
           <Commands {...{selectedMap, selected, notation, setNotation}} />
         </div>
-        <Board {...{player, requiredRef, setRequiredRef, selectedMap}} />
+        <Board {...{player, requiredRef, setRequiredRef, selectedMap, notation, dailyMap, iterationRef}} />
         <NotationList {...{notation, list, setList, iterationRef, player, setPlayer, requiredRef, setRequiredRef, selectedMap, setSelectedMap, dailyMap, setMapSelectorPopup}} />
     </div>
     {mapSelectorPopup && <MapSelectorPopup {...{setMapSelectorPopup, setSelectedMap}} />}

@@ -7,29 +7,13 @@ import Palette from './modules/Palette';
 import NotationList from './modules/NotationList';
 import Functions from './modules/Functions';
 import Commands from './modules/Commands';
+import { Map } from './maps';
 
 type requiredRef = {
     cord: number[];
     color: string;
     required?: boolean;
 }[]
-
-type Map = {
-    ruleset: {
-        control: string[],
-        color: string[],
-        functions: { name: string; args: number }[];
-    },
-    player: {
-        spawn: number[],
-        direction: string,
-    },
-    board: {
-        cord: number[],
-        color: string,
-        required?: true
-    }[]
-}
 
 const Editor:React.FC = () => {
     const [args, setArgs] = useState<{f0: number, f1: number, f2: number}>({ f0: 0, f1: 0, f2: 0 });
@@ -46,6 +30,7 @@ const Editor:React.FC = () => {
             color: ['red', 'purple', 'blue'],
             functions: [{ name: 'f0', args: args.f0 }, { name: 'f1', args: args.f1 }, { name: 'f2', args: args.f2 }]
         },
+        solution: [],
         player: { spawn: [], direction: ''},
         board: []
     });
@@ -76,7 +61,7 @@ return (
                 <Commands {...{selectedMap: editorMap, selected, notation, setNotation}} />
             </div>
         }
-        <Board {...{selectedMap: editorMap, setEditorMap, requiredRef, setRequiredRef, player, selectedBlock, setSelectedBlock, preview}}/>        
+        <Board {...{selectedMap: editorMap, setEditorMap, requiredRef, setRequiredRef, player, selectedBlock, setSelectedBlock, preview, notation}}/>        
 
         {!preview && <Panel {...{setRulesetPopup, setPreview, setSelectedBlock}}/>}
 

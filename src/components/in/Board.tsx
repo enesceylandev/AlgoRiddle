@@ -2,23 +2,7 @@ import React, { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExpand, faShuttleSpace, faStar } from '@fortawesome/free-solid-svg-icons';
 import CryptoJS from 'crypto-js';
-
-type Map = {
-    ruleset: {
-      control: string[];
-      color: string[];
-      functions: { name: string; args: number }[];
-    },
-    player: {
-      spawn: number[];
-      direction: string,
-    },
-    board: {
-      cord: number[];
-      color: string;
-      required?: boolean
-    }[]
-  }
+import { Map } from './maps';
 type Props = {
     player: { cords: number[], direction: string | undefined };
     requiredRef: {
@@ -31,11 +15,14 @@ type Props = {
     preview?: boolean
     selectedBlock?: number[][];
     setSelectedBlock?: React.Dispatch<React.SetStateAction<number[][]>>;
+    notation: string[][];
+    dailyMap?: Map;
+    iterationRef?: React.MutableRefObject<number>;
 };
 
-const Play: React.FC<Props> = ({ player, requiredRef, setRequiredRef, selectedMap, selectedBlock, setSelectedBlock, preview }) => {
+const Play: React.FC<Props> = ({ player, requiredRef, setRequiredRef, selectedMap, selectedBlock, setSelectedBlock, preview, notation, dailyMap, iterationRef }) => {
     const gridSize = 18; // VisibleGrid (GridSize+2) ex. gridSize = 18 => 16x16 visible grid
-    const opacityStep = 0.02;
+    const opacityStep = 0.04;
 
     useEffect(() => {
         if (requiredRef !== undefined && requiredRef.length > 0) {
@@ -44,7 +31,27 @@ const Play: React.FC<Props> = ({ player, requiredRef, setRequiredRef, selectedMa
             }
         }else if(selectedMap.board.some((item) => item.required === true)){
             if(!preview){
+                if(iterationRef) {
+                    iterationRef.current += 1;
+                }
                 console.log("you win!");
+                if(dailyMap){
+                    let solution: string[] = selectedMap.solution;
+                    const savedSolutions = localStorage.getItem("solutions");
+                    if(savedSolutions){
+                        const parsedSolutions = JSON.parse(savedSolutions);
+                        if(!parsedSolutions.some((item: any)=> JSON.stringify(item) === JSON.stringify(solution))){
+                            parsedSolutions.push(solution);
+                            localStorage.setItem("solutions", JSON.stringify(parsedSolutions));
+                            console.log("solution saved!")
+                        }else{
+                            console.log("solution already exists!");
+                        }
+                    }else{
+                        localStorage.setItem("solutions", JSON.stringify([solution]));
+                        console.log("solution saved!")
+                    }
+                }
             }else{
                 const originalText = JSON.stringify(selectedMap);
                 const key = "ultraSecretKey";

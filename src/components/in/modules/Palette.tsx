@@ -1,38 +1,12 @@
 import { faShuttleSpace, faStar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react'
-
+import { Map } from '../maps';
 type Props = {
     selectedBlock: number[][],
     setSelectedBlock?: React.Dispatch<React.SetStateAction<number[][]>>;
-    editorMap: {
-        ruleset: {
-            control: string[],
-            color: string[],
-            functions: { name: string; args: number }[];
-        },
-        player: {
-            spawn: number[],
-            direction: string,
-        },
-        board: {
-            cord: number[],
-            color: string,
-            required?: true
-        }[]
-    },
-    setEditorMap?: React.Dispatch<React.SetStateAction<{
-        ruleset: {
-            control: string[];
-            color: string[];
-            functions: { name: string; args: number; }[];
-        };
-        player: {
-            spawn: number[];
-            direction: string;
-        };
-        board: { cord: number[]; color: string; required?: true; }[];
-    }>>;
+    editorMap: Map,
+    setEditorMap?: React.Dispatch<React.SetStateAction<Map>>;
     setPlayer?: React.Dispatch<React.SetStateAction<{ cords: number[]; direction: string | undefined; }>>;
 }
 
