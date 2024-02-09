@@ -33,7 +33,8 @@ const Play: React.FC = () => {
   const [mapSelectorPopup, setMapSelectorPopup] = useState<boolean>(false);
   const [notation, setNotation] = useState<string[][]>([])
   const [list, setList] = useState<string[]>([]);
-  const [selectedMap, setSelectedMap] = useState<Map>(playground[0]);
+  const [dailyMap, setDailyMap] = useState<Map>(playground[0]);
+  const [selectedMap, setSelectedMap] = useState<Map>(dailyMap);
   const [requiredRef, setRequiredRef] = React.useState<requiredRef>(selectedMap.board.filter((item) => item.required === true));
 
   const [player, setPlayer] = useState<{ cords: number[], direction: string | undefined }>({
@@ -44,8 +45,12 @@ const Play: React.FC = () => {
   useEffect(()=> {
     setPlayer({ cords: [selectedMap.player.spawn[0], selectedMap.player.spawn[1]], direction: selectedMap.player.direction });
     setRequiredRef(selectedMap.board.filter((item) => item.required === true));
-    setMapSelectorPopup(false)
+    setMapSelectorPopup(false);
+    setNotation([]);
+    setSelected(null);
+    setList([]);
   }, [selectedMap])
+
   return (
     <>
     <div className='flex items-center'>
@@ -55,7 +60,7 @@ const Play: React.FC = () => {
           <Commands {...{selectedMap, selected, notation, setNotation}} />
         </div>
         <Board {...{player, requiredRef, setRequiredRef, selectedMap}} />
-        <NotationList {...{notation, list, setList, iterationRef, player, setPlayer, requiredRef, setRequiredRef, selectedMap, setMapSelectorPopup}} />
+        <NotationList {...{notation, list, setList, iterationRef, player, setPlayer, requiredRef, setRequiredRef, selectedMap, setSelectedMap, dailyMap, setMapSelectorPopup}} />
     </div>
     {mapSelectorPopup && <MapSelectorPopup {...{setMapSelectorPopup, setSelectedMap}} />}
     </>

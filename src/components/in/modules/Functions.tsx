@@ -53,7 +53,7 @@ const Functions: React.FC<Props> = ({selected, setSelected, notation, selectedMa
                 {/* Showing icon/color/function number */}                    
                     {/* direction */}
                     {notation[layer - 1] && notation[layer - 1][i] && (notation[layer -1][i] === "left" || notation[layer - 1][i] === "right" || notation[layer - 1][i] === "forward") ? (
-                        <FontAwesomeIcon icon={whichIcon(notation[layer - 1][i])} />    
+                        <FontAwesomeIcon icon={whichIcon(notation[layer - 1][i])} />
 
                     // color 
                     ) : (notation[layer - 1] && notation[layer - 1][i] && (selectedMap.ruleset.color.includes(notation[layer - 1][i]))) ? (

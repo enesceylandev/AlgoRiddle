@@ -38,7 +38,6 @@ const MapSelectorPopup: React.FC<Props> = ({ setMapSelectorPopup, setSelectedMap
     );
   
     const joinMap = (input: string) => {
-      console.log("test")
       try {
         const originalText = input;
         const key = "ultraSecretKey";

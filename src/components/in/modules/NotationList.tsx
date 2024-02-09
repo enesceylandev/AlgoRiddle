@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect } from 'react';
 import cloneDeep from 'lodash/cloneDeep';
 import HandleLastActions from './functions/HandleLastActions';
+import { playground } from '../maps'
 
 type Map = {
     ruleset: {
@@ -36,7 +37,9 @@ type Props = {
     setMapSelectorPopup?: React.Dispatch<React.SetStateAction<boolean>>;
     preview?: boolean;
     setPreview?: React.Dispatch<React.SetStateAction<boolean>>;
-    selectedMap: Map
+    selectedMap: Map;
+    dailyMap?: Map;
+    setSelectedMap?: React.Dispatch<React.SetStateAction<Map>>;
 };
 
 const whichIcon = (direction: string) => {
@@ -52,7 +55,7 @@ const whichIcon = (direction: string) => {
     };
 };
 
-const NotationList: React.FC<Props> = ({notation, list, setList, iterationRef, player, setPlayer, setRequiredRef, selectedMap, setMapSelectorPopup, preview, setPreview}) => {
+const NotationList: React.FC<Props> = ({notation, list, setList, iterationRef, player, setPlayer, setRequiredRef, selectedMap, setSelectedMap, dailyMap, setMapSelectorPopup, preview, setPreview}) => {
     const [gameSpeed, setGameSpeed] = React.useState<number>(200);
     useEffect(() => {
         HandleLastActions({ list, player, setPlayer, selectedMap, movePlayer, turnPlayer });
@@ -208,7 +211,16 @@ const NotationList: React.FC<Props> = ({notation, list, setList, iterationRef, p
     }
     return (
         <div className='z-20'>
-            <div className='border-x border-t rounded-t-md dark:border-slate-800 p-2 justify-between flex rounded-b-md'>
+            {dailyMap !== selectedMap && !preview && (
+                <div className='border-x border-t rounded-t-md dark:border-slate-800 text-slate-800 dark:text-slate-400 p-2 flex items-center justify-between rounded-b-md'>
+                    Now playing custom map
+                    <button className='dark:border-slate-800 text-slate-800 dark:text-slate-400 hover:cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800
+                        border rounded-md text-sm h-[36px] px-5 flex items-center justify-center'
+                        onClick={() => setSelectedMap && setSelectedMap(playground[0])}>
+                        <FontAwesomeIcon icon={faRightFromBracket} className='text-lg text-red-500 hover:text-red-600'/></button>
+                </div>
+            )}
+            <div className='border-x border-t rounded-t-md dark:border-slate-800 p-2 justify-between flex'>
                 {!preview ? (
                     <button className='dark:border-slate-800 text-slate-800 dark:text-slate-400 hover:cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800
                         border rounded-md text-sm h-[36px] p-2'
