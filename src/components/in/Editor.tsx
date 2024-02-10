@@ -30,6 +30,7 @@ const Editor:React.FC = () => {
             color: ['red', 'purple', 'blue'],
             functions: [{ name: 'f0', args: args.f0 }, { name: 'f1', args: args.f1 }, { name: 'f2', args: args.f2 }]
         },
+        difficulty: 'Custom',
         solution: [],
         player: { spawn: [], direction: ''},
         board: []

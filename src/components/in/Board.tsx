@@ -16,11 +16,12 @@ type Props = {
     selectedBlock?: number[][];
     setSelectedBlock?: React.Dispatch<React.SetStateAction<number[][]>>;
     notation: string[][];
-    dailyMap?: Map;
+    dailyMap?: Map[];
     iterationRef?: React.MutableRefObject<number>;
+    setMapSelectorPopup?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const Play: React.FC<Props> = ({ player, requiredRef, setRequiredRef, selectedMap, selectedBlock, setSelectedBlock, preview, notation, dailyMap, iterationRef }) => {
+const Play: React.FC<Props> = ({ player, requiredRef, setRequiredRef, selectedMap, setMapSelectorPopup, selectedBlock, setSelectedBlock, preview, notation, dailyMap, iterationRef }) => {
     const gridSize = 18; // VisibleGrid (GridSize+2) ex. gridSize = 18 => 16x16 visible grid
     const opacityStep = 0.04;
 
@@ -34,6 +35,7 @@ const Play: React.FC<Props> = ({ player, requiredRef, setRequiredRef, selectedMa
                 if(iterationRef) {
                     iterationRef.current += 1;
                 }
+                setMapSelectorPopup && setMapSelectorPopup(true);
                 console.log("you win!");
                 if(dailyMap){
                     let solution: string[] = selectedMap.solution;

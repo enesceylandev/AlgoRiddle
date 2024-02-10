@@ -23,7 +23,7 @@ type Props = {
     preview?: boolean;
     setPreview?: React.Dispatch<React.SetStateAction<boolean>>;
     selectedMap: Map;
-    dailyMap?: Map;
+    dailyMap?: Map[];
     setSelectedMap?: React.Dispatch<React.SetStateAction<Map>>;
 };
 
@@ -196,7 +196,7 @@ const NotationList: React.FC<Props> = ({notation, list, setList, iterationRef, p
     }
     return (
         <div className='z-20'>
-            {dailyMap !== selectedMap && !preview && (
+            {!dailyMap?.includes(selectedMap) && !preview && (
                 <div className='border-x border-t rounded-t-md dark:border-slate-800 text-slate-800 dark:text-slate-400 p-2 flex items-center justify-between rounded-b-md'>
                     Now playing custom map
                     <button className='dark:border-slate-800 text-slate-800 dark:text-slate-400 hover:cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800

@@ -8,6 +8,7 @@ export type Map = {
         spawn: number[],
         direction: string,
     },
+    difficulty: string,
     solution: string[],
     board: {
         cord: number[],
@@ -27,6 +28,7 @@ export const playground: Map[] = [
             spawn: [2, 8],
             direction: 'right'
         },
+        difficulty: 'Advanced',
         solution: ["forward","blue-f0","f1","forward","blue-left","f1"],
         board: [
             {
@@ -86,12 +88,13 @@ export const playground: Map[] = [
         ruleset: {
             control: [ 'left', 'forward', 'right'],
             color: ['red', 'purple', 'blue'],
-            functions: [{ name: 'f0', args: 5 }]
+            functions: [{ name: 'f0', args: 3 }, { name: 'f1', args: 0 }, { name: 'f2', args: 0 }]
         },
         player: {
             spawn: [10, 3],
             direction: 'down'
         },
+        difficulty: 'Beginner',
         solution: [],
         board: [
             {
@@ -189,13 +192,14 @@ export const playground: Map[] = [
         ruleset: {
             control: [ 'left', 'forward', 'right'],
             color: ['red', 'purple', 'blue'],
-            functions: [{ name: 'f0', args: 6 }]
+            functions: [{ name: 'f0', args: 6 }, { name: 'f1', args: 0 }, { name: 'f2', args: 0 }]
         },
         player: {
             spawn: [2, 10],
             direction: 'right'
         },
-        solution: [],
+        difficulty: 'Expert',
+        solution: ["forward","blue-f0","forward","left","forward","right"],
         board: [
             {
                 cord: [2, 10],
@@ -269,7 +273,8 @@ export const playground: Map[] = [
             },
             {
                 cord: [15, 5],
-                color: 'blue'
+                color: 'blue',
+                required: true
             }
         ]
     },
@@ -277,12 +282,13 @@ export const playground: Map[] = [
         ruleset: {
             control: [ 'left', 'forward', 'right'],
             color: ['red', 'purple', 'blue'],
-            functions: [{ name: 'f0', args: 5 }, { name: 'f1', args: 7 }]
+            functions: [{ name: 'f0', args: 5 }, { name: 'f1', args: 7 }, { name: 'f2', args: 0 }]
         },
         player: {
             spawn: [4, 5],
             direction: 'right'
         },
+        difficulty: 'Specialist',
         solution: [],
         board: [
             {
