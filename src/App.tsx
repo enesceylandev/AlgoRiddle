@@ -27,10 +27,10 @@ function App() {
       <Routes>
         <Route path='/' element={<Landing />} />
         <Route path='/about' element={<About />} />
-        <Route path='/play' element={<Play/>} />
-        <Route path='/editor' element={<Editor/>} />
+        <Route path='/play' element={<Play />} />
+        <Route path='/editor' element={<Editor />} />
       </Routes>
-      <Footer/>
+      <Footer />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import NotationList from './modules/NotationList'
 import Functions from './modules/Functions'
 import { playground, Map } from './maps'
 import MapSelectorPopup from './popups/MapSelectorPopup'
+import TutorialPopup from './popups/TutorialPopup'
 
 type requiredRef = {
   cord: number[];
@@ -15,6 +16,8 @@ const Play: React.FC = () => {
   const iterationRef = useRef<number>(0);
   const [selected, setSelected] = useState<number[] | null>(null)
   const [mapSelectorPopup, setMapSelectorPopup] = useState<boolean>(false);
+  const storedValue = localStorage.getItem('isPlayerNew'); // localStorage'dan değeri bir değişkene atayın
+  const [tutorialPopup, setTutorialPopup] = useState<boolean>(storedValue ? storedValue === 'true' : true); // Değişkene atanmış değeri kullanarak useState'i çağırın
   const [notation, setNotation] = useState<string[][]>([])
   const [list, setList] = useState<string[]>([]);
   const [dailyMap] = useState<Map[]>([playground[0], playground[1], playground[2], playground[3]]);
@@ -34,6 +37,7 @@ const Play: React.FC = () => {
     setList([]);
   }, [selectedMap])
 
+  console.log(tutorialPopup)
   return (
     <>
       <div className='flex items-center'>
@@ -45,6 +49,7 @@ const Play: React.FC = () => {
         <Board {...{ player, requiredRef, setRequiredRef, selectedMap, setMapSelectorPopup, notation, dailyMap, iterationRef }} />
         <NotationList {...{ notation, list, setList, iterationRef, player, setPlayer, requiredRef, setRequiredRef, selectedMap, setSelectedMap, dailyMap, setMapSelectorPopup }} />
       </div>
+      {tutorialPopup && <TutorialPopup {...{ setTutorialPopup }} />}
       {mapSelectorPopup && <MapSelectorPopup {...{ setMapSelectorPopup, setSelectedMap, dailyMap }} />}
     </>
   )
