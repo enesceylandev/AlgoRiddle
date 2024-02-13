@@ -77,13 +77,14 @@ const NotationList: React.FC<Props> = ({
       movePlayer,
       turnPlayer,
     });
-    // console.log(list)
   }, [list]); // eslint-disable-line
 
-  const ReadNotation = (i: number, playerClone: any, notationClone: any) => {
+  const ReadNotation = (layer: number, playerClone: any, notationClone: any) => {
     const delayBetweenSteps = gameSpeed;
     const notationRef = cloneDeep(notationClone);
-    const notationArray = notationRef[i];
+    const notationArray = notationRef[layer];
+    // console.log(notationRef)
+    // console.log(notationArray)
     let playerRef = cloneDeep(playerClone);
     let index = 0;
     const processItem = (
@@ -91,7 +92,6 @@ const NotationList: React.FC<Props> = ({
       notationArray: string[],
       currentIteration: number,
     ) => {
-      // console.log(notationArray)
       if (
         notationArray &&
         index < notationArray.length &&
@@ -102,16 +102,24 @@ const NotationList: React.FC<Props> = ({
           if (item.includes("forward")) {
             playerRef.cords = calcCords(item, playerRef);
           }
-          playerRef.direction = calcTurn(playerRef.direction, item);
+          playerRef.direction = calcTurn(playerRef.direction, playerRef.cords, item);
+          // console.log(notationArray)
           setList((prevList) => [...prevList, item]);
+          console.log(playerRef.cords)
           if (
             item.includes("f") &&
             !item.includes("forward") &&
             !item.includes("left") &&
             checkBlock(playerRef, item)
           ) {
-            let test = notation[0].slice(index + 1);
-            notationRef[0].push(...test);
+            // console.log(item)
+            // let test = notation[Number(item.split("f")[1])].slice(index + 1);
+            // notationRef[item.split("f")[1]].push(...test);
+            // console.log(notationRef)
+            if(notationRef[layer].some((selectedItem:string) => selectedItem === "f0" || selectedItem === "f1" || selectedItem === "f2")){;
+              notationRef[item.split("f")[1]].push(...notationRef[layer].slice(index + 1));
+              // console.log(item)
+            }
             iterationRef.current += 1;
             // Bunu yapmak fonksiyonu iptal ederken sıkıntı çıkartıyor bir sonraki update de bakılacak
             setTimeout(() => {
@@ -180,7 +188,7 @@ const NotationList: React.FC<Props> = ({
 
   const calcCords = (item: string, playerRef: any) => {
     const cords = playerRef.cords;
-    const direction = calcTurn(playerRef.direction, item);
+    const direction = calcTurn(playerRef.direction, cords, item);
     const move = 1;
     switch (direction) {
       case "right":
@@ -205,29 +213,34 @@ const NotationList: React.FC<Props> = ({
     }));
   };
 
-  const calcTurn = (direction: string | undefined, turn: string) => {
-    if (turn.includes("-")) {
-      turn = turn.split("-")[1];
-    }
-    switch (direction) {
-      case "right":
-        return turn === "left" ? "up" : turn === "right" ? "down" : direction;
-      case "left":
-        return turn === "left" ? "down" : turn === "right" ? "up" : direction;
-      case "up":
-        return turn === "left"
-          ? "left"
-          : turn === "right"
-            ? "right"
-            : direction;
-      case "down":
-        return turn === "left"
-          ? "right"
-          : turn === "right"
-            ? "left"
-            : direction;
-      default:
-        return direction;
+  const calcTurn = (direction: string | undefined, cords: number[], turn: string) => {
+    let check = selectedMap.board.filter((item) => (item.cord[0] === cords[0] && item.cord[1] === cords[1]))[0] !== undefined && selectedMap.board.filter((item) => (item.cord[0] === cords[0] && item.cord[1] === cords[1]))[0].color
+    if(turn.split("-")[0] === check){
+      if (turn.includes("-")) {
+        turn = turn.split("-")[1];
+      }
+      switch (direction) {
+        case "right":
+          return turn === "left" ? "up" : turn === "right" ? "down" : direction;
+          case "left":
+            return turn === "left" ? "down" : turn === "right" ? "up" : direction;
+            case "up":
+              return turn === "left"
+              ? "left"
+              : turn === "right"
+              ? "right"
+              : direction;
+              case "down":
+                return turn === "left"
+                ? "right"
+                : turn === "right"
+                ? "left"
+                : direction;
+                default:
+                  return direction;
+      }
+    }else{
+      return direction
     }
   };
   const turnPlayer = (direction: string) => {
@@ -339,11 +352,11 @@ const NotationList: React.FC<Props> = ({
                 {item === "left" || item === "right" || item === "forward" ? (
                   <FontAwesomeIcon icon={whichIcon(item)} className="p-2.5" />
                 ) : !!item.split("-")[1] &&
-                  !item.split("-")[1].includes("0" || "1" || "2") ? (
+                  !(item.split("-")[1] === "f0" || item.split("-")[1] === "f1" || item.split("-")[1] === "f2") ? (
                   <div className="p-0.5 w-7 h-7">
                     <div
                       className={`bg-${item.split("-")[0]}-500 w-full h-full rounded-md flex items-center justify-center`}
-                    >
+                    > 
                       <FontAwesomeIcon icon={whichIcon(item.split("-")[1])} />
                     </div>
                   </div>
@@ -352,14 +365,8 @@ const NotationList: React.FC<Props> = ({
                     <div
                       className={`bg-${item.split("-")[0]}-500 w-full h-full rounded-md flex items-center justify-center`}
                     >
-                      {/* {item.split("f")[1]} */}
-                      {!!item.split("-")[1] &&
-                      !!item.split("-")[1].includes("0" || "1" || "2")
-                        ? item.split("-")[1]
-                        : !!item.split("f")[1] &&
-                            (item.split("f")[1] === "0" || "1" || "2")
-                          ? item
-                          : null}
+                      {item === "f0" ||  item === "f1" || item === "f2" ? item : null}
+                      {/* {item} */}
                     </div>
                   </div>
                 )}

@@ -45,9 +45,6 @@ const Play: React.FC<Props> = ({
     if (requiredRef !== undefined && requiredRef.length > 0) {
       requiredRef.forEach((i) => {
         if (i.cord[0] === player.cords[0] && i.cord[1] === player.cords[1]) {
-          console.log(i)
-          console.log("test");
-          console.log(requiredRef)
           setRequiredRef(requiredRef.filter(i => i.cord[0] !== player.cords[0] || i.cord[1] !== player.cords[1]));
         }
       });
