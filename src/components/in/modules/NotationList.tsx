@@ -103,9 +103,8 @@ const NotationList: React.FC<Props> = ({
             playerRef.cords = calcCords(item, playerRef);
           }
           playerRef.direction = calcTurn(playerRef.direction, playerRef.cords, item);
-          // console.log(notationArray)
           setList((prevList) => [...prevList, item]);
-          console.log(playerRef.cords)
+          // console.log(playerRef.cords, playerRef.direction);
           if (
             item.includes("f") &&
             !item.includes("forward") &&
@@ -117,10 +116,11 @@ const NotationList: React.FC<Props> = ({
             // notationRef[item.split("f")[1]].push(...test);
             // console.log(notationRef)
             if(notationRef[layer].some((selectedItem:string) => selectedItem === "f0" || selectedItem === "f1" || selectedItem === "f2")){;
-              notationRef[item.split("f")[1]].push(...notationRef[layer].slice(index + 1));
+              notationRef[item.split("f")[1]].push(...notation[layer].slice(index + 1));
               // console.log(item)
             }
             iterationRef.current += 1;
+            
             // Bunu yapmak fonksiyonu iptal ederken sıkıntı çıkartıyor bir sonraki update de bakılacak
             setTimeout(() => {
               ReadNotation(
@@ -190,17 +190,38 @@ const NotationList: React.FC<Props> = ({
     const cords = playerRef.cords;
     const direction = calcTurn(playerRef.direction, cords, item);
     const move = 1;
-    switch (direction) {
-      case "right":
-        return [cords[0] + move, cords[1]];
-      case "left":
-        return [cords[0] - move, cords[1]];
-      case "up":
-        return [cords[0], cords[1] - move];
-      case "down":
-        return [cords[0], cords[1] + move];
-      default:
-        return cords;
+    let check = selectedMap.board.filter((item) => (item.cord[0] === cords[0] && item.cord[1] === cords[1]))[0] !== undefined && selectedMap.board.filter((item) => (item.cord[0] === cords[0] && item.cord[1] === cords[1]))[0].color
+    // console.log(item.includes("-") && item.split("-")[0] !== "forward" && item.split("-")[0] === check)
+    if(item.includes("-")){
+      if(item.split("-")[0] === check){
+        switch (direction) {
+          case "right":
+            return [cords[0] + move, cords[1]];
+            case "left":
+              return [cords[0] - move, cords[1]];
+              case "up":
+                return [cords[0], cords[1] - move];
+                case "down":
+                  return [cords[0], cords[1] + move];
+                  default:
+                    return cords;
+        }
+      }else{
+        return cords
+      }
+    }else{
+      switch (direction) {
+        case "right":
+          return [cords[0] + move, cords[1]];
+          case "left":
+            return [cords[0] - move, cords[1]];
+            case "up":
+              return [cords[0], cords[1] - move];
+              case "down":
+                return [cords[0], cords[1] + move];
+                default:
+                  return cords;
+      }
     }
   };
 
@@ -215,39 +236,34 @@ const NotationList: React.FC<Props> = ({
 
   const calcTurn = (direction: string | undefined, cords: number[], turn: string) => {
     let check = selectedMap.board.filter((item) => (item.cord[0] === cords[0] && item.cord[1] === cords[1]))[0] !== undefined && selectedMap.board.filter((item) => (item.cord[0] === cords[0] && item.cord[1] === cords[1]))[0].color
-    if(turn.split("-")[0] === check){
-      if (turn.includes("-")) {
-        turn = turn.split("-")[1];
-      }
-      switch (direction) {
-        case "right":
-          return turn === "left" ? "up" : turn === "right" ? "down" : direction;
-          case "left":
-            return turn === "left" ? "down" : turn === "right" ? "up" : direction;
-            case "up":
-              return turn === "left"
-              ? "left"
-              : turn === "right"
-              ? "right"
-              : direction;
-              case "down":
-                return turn === "left"
-                ? "right"
-                : turn === "right"
-                ? "left"
-                : direction;
-                default:
-                  return direction;
-      }
-    }else{
-      return direction
+
+    // If 'turn' includes '-', split and check the condition
+    if(turn.includes("-")){
+        const splittedTurn = turn.split("-");
+        // Check if the first part of 'turn' matches the color check
+        if(splittedTurn[0] === check){
+            turn = splittedTurn[1]; // Get the second part as the actual turn
+        }
     }
-  };
+
+    // Switch statement to determine the new direction based on the turn
+    switch (direction) {
+        case "right":
+            return turn === "left" ? "up" : turn === "right" ? "down" : direction;
+        case "left":
+            return turn === "left" ? "down" : turn === "right" ? "up" : direction;
+        case "up":
+            return turn === "left" ? "left" : turn === "right" ? "right" : direction;
+        case "down":
+            return turn === "left" ? "right" : turn === "right" ? "left" : direction;
+        default:
+            return direction;
+      }
+};
   const turnPlayer = (direction: string) => {
     let mixedDirection = direction.includes("-")
       ? direction.split("-")[1]
       : direction;
-    // console.log(player.cords)
     switch (mixedDirection) {
       case "left":
         setPlayer((prevPlayer) => {
