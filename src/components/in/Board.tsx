@@ -19,10 +19,11 @@ type Props = {
   preview?: boolean;
   selectedBlock?: number[][];
   setSelectedBlock?: React.Dispatch<React.SetStateAction<number[][]>>;
-  notation: string[][];
   dailyMap?: Map[];
   iterationRef?: React.MutableRefObject<number>;
   setMapSelectorPopup?: React.Dispatch<React.SetStateAction<boolean>>;
+  setWinnerPopup?: React.Dispatch<React.SetStateAction<boolean>>;
+  setCustomMapId?: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const Play: React.FC<Props> = ({
@@ -34,9 +35,10 @@ const Play: React.FC<Props> = ({
   selectedBlock,
   setSelectedBlock,
   preview,
-  notation,
   dailyMap,
   iterationRef,
+  setWinnerPopup,
+  setCustomMapId,
 }) => {
   const gridSize = 16; // VisibleGrid (GridSize+2) ex. gridSize = 18 => 16x16 visible grid
   const opacityStep = 0.04;
@@ -54,6 +56,7 @@ const Play: React.FC<Props> = ({
           iterationRef.current += 1;
         }
         setMapSelectorPopup && setMapSelectorPopup(true);
+        
         console.log("you win!");
         if (dailyMap) {
           let solution: string[] = selectedMap.solution;
@@ -87,7 +90,11 @@ const Play: React.FC<Props> = ({
           originalText,
           key,
         ).toString();
-        console.log(encryptedMessage);
+        if (iterationRef) {
+          iterationRef.current += 1;
+        }
+        setWinnerPopup && setWinnerPopup(true);
+        setCustomMapId && setCustomMapId(encryptedMessage);
       }
     }
   }, [player]); // eslint-disable-line

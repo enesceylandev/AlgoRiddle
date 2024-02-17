@@ -36,7 +36,9 @@ const Palette: React.FC<Props> = ({ selectedBlock, setSelectedBlock, editorMap, 
 
         newBlock.map((item) => {
           newItem.push({ ...item, required: true });
+          return null;
         });
+        
         setEditorMap?.({
           ...editorMap,
           board: [

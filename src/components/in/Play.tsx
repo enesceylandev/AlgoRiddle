@@ -72,7 +72,6 @@ const Play: React.FC = () => {
               setRequiredRef,
               selectedMap,
               setMapSelectorPopup,
-              notation,
               dailyMap,
               iterationRef,
             }}

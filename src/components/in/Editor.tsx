@@ -8,6 +8,7 @@ import NotationList from './modules/NotationList';
 import Functions from './modules/Functions';
 import Commands from './modules/Commands';
 import { Map } from './maps';
+import WinnerEditorPopup from './popups/WinnerEditorPopup';
 
 type requiredRef = {
     cord: number[];
@@ -24,6 +25,8 @@ const Editor:React.FC = () => {
     const iterationRef = useRef<number>(0);
     const [selected, setSelected] = useState<number[] | null>(null);
     const [rulesetPopup, setRulesetPopup] = useState<boolean>(false);
+    const [winnerPopup, setWinnerPopup] = useState<boolean>(false);
+    const [customMapId, setCustomMapId] = useState<string>('');
     const [editorMap, setEditorMap] = useState<Map>({
         ruleset: {
             control: ['left', 'forward', 'right'],
@@ -64,7 +67,8 @@ return (
         }
         <div className='order-1 sm:order-2 mt-24 sm:mt-0'>
 
-        <Board {...{selectedMap: editorMap, setEditorMap, requiredRef, setRequiredRef, player, selectedBlock, setSelectedBlock, preview, notation}}/>        
+        <Board {...{selectedMap: editorMap, setEditorMap, requiredRef, setRequiredRef, player, selectedBlock, setSelectedBlock,
+            preview, setWinnerPopup, iterationRef, setCustomMapId}}/>        
         </div>
 
         <div className='order-3 mb-12'>
@@ -74,7 +78,7 @@ return (
         {preview && <NotationList {...{selectedMap: editorMap, notation, list, setList, iterationRef, player, setPlayer, requiredRef, setRequiredRef, 
         preview, setPreview}}/>}
         </div>
-        
+        {winnerPopup && <WinnerEditorPopup {...{setWinnerPopup, customMapId, setPreview, setList, setRequiredRef, selectedMap: editorMap, setPlayer}}/>}
         {rulesetPopup && <RulesetPopup {...{setRulesetPopup, args, setArgs}}/>}
     </div>
 
