@@ -51,7 +51,7 @@ const RulesetPopup: React.FC<Props> = ({ args, setArgs, setRulesetPopup }) => {
           {funcPreview(5)}
         </div>
         <button
-            onClick={() => setArgs(prev => ({ ...prev, [selectedFunction]: selectedArgs !== 12 ? selectedArgs + 1 : selectedArgs }))}
+            onClick={() => setArgs(prev => ({ ...prev, [selectedFunction]: selectedArgs !== 9 ? selectedArgs + 1 : selectedArgs }))}
             className="border w-8 border-green-500 hover:border-green-600 text-green-600 font-bold rounded-md"
         >+</button>
         <span className="flex items-center justify-center text-slate-800 dark:text-slate-300 font-bold">{selectedArgs}</span>
@@ -64,7 +64,7 @@ const RulesetPopup: React.FC<Props> = ({ args, setArgs, setRulesetPopup }) => {
         {page === 'preview' && (
           <>
             <h1 className="text-xl font-semibold p-4 text-black dark:text-[#dee2e6] text-center">Choose the module</h1>
-            <div className="grid grid-cols-2 gap-5 text-slate-800 dark:text-slate-300 my-10">
+            <div className="grid sm:grid-cols-2 grid-cols-1 gap-5 text-slate-800 dark:text-slate-300 my-10">
               <button onClick={() => setPage("function")} className="flex flex-col p-3 bg-white hover:bg-slate-50 dark:bg-[#2c3136] hover:dark:bg-[#3d4247] shadow-md rounded-md">
                 <div className="grid grid-cols-6">
                   <p className="col-span-6 font-semibold mb-12">Functions</p>

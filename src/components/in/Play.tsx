@@ -52,52 +52,55 @@ const Play: React.FC = () => {
     setList([]);
   }, [selectedMap]);
 
-  console.log(tutorialPopup);
   return (
     <>
-      <div className="flex items-center">
+      <div className="flex flex-col sm:flex-row items-center">
         <img
           src="https://tailwindcss.com/_next/static/media/docs@30.8b9a76a2.avif"
           alt=""
           className="dark:blur-xl opacity-50 absolute top-0 left-0 overflow-hidden select-none -z-0"
         />
-        <div className="flex flex-col space-y-12 z-20">
+        <div className="flex flex-col space-y-12 items-center sm:items-start z-20 order-2 sm:order-1">
           <Functions {...{ selectedMap, selected, setSelected, notation }} />
           <Commands {...{ selectedMap, selected, notation, setNotation }} />
         </div>
-        <Board
-          {...{
-            player,
-            requiredRef,
-            setRequiredRef,
-            selectedMap,
-            setMapSelectorPopup,
-            notation,
-            dailyMap,
-            iterationRef,
-          }}
-        />
-        <NotationList
-          {...{
-            notation,
-            list,
-            setList,
-            iterationRef,
-            player,
-            setPlayer,
-            requiredRef,
-            setRequiredRef,
-            selectedMap,
-            setSelectedMap,
-            dailyMap,
-            setMapSelectorPopup,
-          }}
-        />
+        <div className="order-1 sm:order-2 mt-24 sm:mt-0">
+          <Board
+            {...{
+              player,
+              requiredRef,
+              setRequiredRef,
+              selectedMap,
+              setMapSelectorPopup,
+              notation,
+              dailyMap,
+              iterationRef,
+            }}
+          />
+        </div>
+        <div className="order-3 flex my-12">
+          <NotationList
+            {...{
+              notation,
+              list,
+              setList,
+              iterationRef,
+              player,
+              setPlayer,
+              requiredRef,
+              setRequiredRef,
+              selectedMap,
+              setSelectedMap,
+              dailyMap,
+              setMapSelectorPopup,
+            }}
+            />
+        </div>
       </div>
       {tutorialPopup && <TutorialPopup {...{ setTutorialPopup }} />}
       {mapSelectorPopup && (
         <MapSelectorPopup
-          {...{ setMapSelectorPopup, setSelectedMap, dailyMap }}
+          {...{ setMapSelectorPopup, selectedMap,setSelectedMap, dailyMap }}
         />
       )}
     </>

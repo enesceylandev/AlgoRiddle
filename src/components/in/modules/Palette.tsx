@@ -50,30 +50,30 @@ const Palette: React.FC<Props> = ({ selectedBlock, setSelectedBlock, editorMap, 
   };
 
   return (
-    <div className='bg-slate-100 dark:bg-slate-700 w-[700px] p-2 rounded-md flex items-center justify-between z-40'>
-      <div className='space-x-3 z-40'>
-        <button onClick={() => handleBlockChange('faShuttleSpace', 'symbol', 'left')} className='bg-blue-500 hover:scale-110 transition-all text-white shadow-md rounded-md w-8 h-8'>
+    <div className='bg-slate-100 dark:bg-slate-700 sm:w-[550px] w-[350px] p-2 rounded-md flex items-center justify-between z-40'>
+      <div className='sm:space-x-3 space-x-1 z-40'>
+        <button onClick={() => handleBlockChange('faShuttleSpace', 'symbol', 'left')} className='bg-blue-500 text-sm sm:text-md  hover:scale-110 transition-all text-white shadow-md rounded-md sm:w-8 sm:h-8 w-6 h-6'>
           <FontAwesomeIcon icon={faShuttleSpace} className='rotate-180' />
         </button>
-        <button onClick={() => handleBlockChange('faShuttleSpace', 'symbol', 'down')} className='bg-blue-500 hover:scale-110 transition-all text-white shadow-md rounded-md w-8 h-8'>
+        <button onClick={() => handleBlockChange('faShuttleSpace', 'symbol', 'down')} className='bg-blue-500 text-sm sm:text-md hover:scale-110 transition-all text-white shadow-md rounded-md sm:w-8 sm:h-8 w-6 h-6'>
           <FontAwesomeIcon icon={faShuttleSpace} className='rotate-90' />
         </button>
-        <button onClick={() => handleBlockChange('faShuttleSpace', 'symbol', 'up')} className='bg-blue-500 hover:scale-110 transition-all text-white shadow-md rounded-md w-8 h-8'>
+        <button onClick={() => handleBlockChange('faShuttleSpace', 'symbol', 'up')} className='bg-blue-500 text-sm sm:text-md hover:scale-110 transition-all text-white shadow-md rounded-md sm:w-8 sm:h-8 w-6 h-6'>
           <FontAwesomeIcon icon={faShuttleSpace} className='-rotate-90' />
         </button>
-        <button onClick={() => handleBlockChange('faShuttleSpace', 'symbol', 'right')} className='bg-blue-500 hover:scale-110 transition-all text-white shadow-md rounded-md w-8 h-8'>
+        <button onClick={() => handleBlockChange('faShuttleSpace', 'symbol', 'right')} className='bg-blue-500 text-sm sm:text-md hover:scale-110 transition-all text-white shadow-md rounded-md sm:w-8 sm:h-8 w-6 h-6'>
           <FontAwesomeIcon icon={faShuttleSpace} className='rotate-0' />
         </button>
-        <button onClick={() => handleBlockChange('faStar', 'symbol')} className='bg-blue-500 hover:scale-110 transition-all text-white shadow-md rounded-md w-8 h-8'>
+        <button onClick={() => handleBlockChange('faStar', 'symbol')} className='bg-blue-500 text-sm sm:text-md hover:scale-110 transition-all text-white shadow-md rounded-md sm:w-8 sm:h-8 w-6 h-6'>
           <FontAwesomeIcon icon={faStar} />
         </button>
       </div>
 
-      <div className='space-x-3 z-40'>
-        <button onClick={() => handleBlockChange('blue', 'color')} className='bg-blue-500 hover:scale-110 transition-all text-white shadow-md rounded-md w-8 h-8'></button>
-        <button onClick={() => handleBlockChange('purple', 'color')} className='bg-purple-500 hover:scale-110 transition-all text-white shadow-md rounded-md w-8 h-8'></button>
-        <button onClick={() => handleBlockChange('red', 'color')} className='bg-red-500 hover:scale-110 transition-all text-white shadow-md rounded-md w-8 h-8'></button>
-        <button onClick={() => handleBlockChange('blank', 'color')} className='border border-slate-300 dark:border-slate-500 hover:scale-110 transition-all shadow-md rounded-md w-8 h-8'></button>
+      <div className='sm:space-x-3 space-x-1 z-40'>
+        <button onClick={() => handleBlockChange('blue', 'color')} className='bg-blue-500 hover:scale-110 transition-all text-white shadow-md rounded-md sm:w-8 sm:h-8 w-6 h-6'></button>
+        <button onClick={() => handleBlockChange('purple', 'color')} className='bg-purple-500 hover:scale-110 transition-all text-white shadow-md rounded-md sm:w-8 sm:h-8 w-6 h-6'></button>
+        <button onClick={() => handleBlockChange('red', 'color')} className='bg-red-500 hover:scale-110 transition-all text-white shadow-md rounded-md sm:w-8 sm:h-8 w-6 h-6'></button>
+        <button onClick={() => handleBlockChange('blank', 'color')} className='border border-slate-300 dark:border-slate-500 hover:scale-110 transition-all shadow-md rounded-md sm:w-8 sm:h-8 w-6 h-6'></button>
       </div>
     </div>
   );

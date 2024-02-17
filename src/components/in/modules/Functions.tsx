@@ -81,7 +81,7 @@ const Functions: React.FC<Props> = ({selected, setSelected, notation, selectedMa
             <h1 className='font-semibold text-slate-900 dark:text-slate-300'>Functions</h1>
             <div className='flex flex-col text-slate-900 dark:text-slate-300'>
                 {selectedMap.ruleset.functions.map((item, index) => item.args >= 1 && (
-                    <div key={index} className='grid grid-cols-12 p-2'>
+                    <div key={index} className={`grid grid-cols-10 p-2`}>
                     <h2 className='p-1 px-2 font-semibold bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300
                      border-slate-300 dark:border-slate-900 border-l border-y rounded-l-md'>{item.name}</h2>
                      {renderNotionButtons(index+1,item.args)}

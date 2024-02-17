@@ -38,7 +38,7 @@ const Play: React.FC<Props> = ({
   dailyMap,
   iterationRef,
 }) => {
-  const gridSize = 18; // VisibleGrid (GridSize+2) ex. gridSize = 18 => 16x16 visible grid
+  const gridSize = 16; // VisibleGrid (GridSize+2) ex. gridSize = 18 => 16x16 visible grid
   const opacityStep = 0.04;
 
   useEffect(() => {
@@ -101,19 +101,14 @@ const Play: React.FC<Props> = ({
         down: "rotate-90",
       };
       return (
-        <FontAwesomeIcon
-          icon={faShuttleSpace}
-          className={iconRotation[player.direction || ""]}
-        />
+        <FontAwesomeIcon icon={faShuttleSpace} className={iconRotation[player.direction || ""]}
+        style={{fontSize: window.innerWidth <= 768 ? window.innerWidth <= 650 ? 10 : 13 : 16}}/>
       );
-    } else if (
-      requiredRef.some(
-        (item) => item.cord[0] === x && item.cord[1] === y && item.required,
-      )
-    ) {
-      return <FontAwesomeIcon icon={faStar} className="text-white z-40" />;
-    }
-    return null;
+    }else if (requiredRef.some(item => item.cord[0] === x && item.cord[1] === y && item.required)) {
+      return <FontAwesomeIcon icon={faStar} className='text-white z-40' 
+      style={{fontSize: window.innerWidth <= 768 ? window.innerWidth <= 650 ? 10 : 13 : 16}}/>;
+  }
+  return null;
   };
 
   const getBackgroundColor = (x: number, y: number) => {
@@ -143,8 +138,8 @@ const Play: React.FC<Props> = ({
   };
   const renderGrid = () => {
     const grid = [];
-    const cellSize = 35;
-    const margin = 3;
+    const cellSize = window.innerWidth <= 768 ? window.innerWidth <= 650 ? 18 : 25 : 35;
+    const margin = window.innerWidth <= 768 ? 2 : 3;
 
     for (let y = 0; y < gridSize; y++) {
       const row = [];
@@ -171,7 +166,7 @@ const Play: React.FC<Props> = ({
             {isBlockSelected(x, y) && (
               <FontAwesomeIcon
                 icon={faExpand}
-                className="flex items-center justify-center"
+                className="flex items-center justify-center text-sm sm:text-xl"
               />
             )}
           </div>,
@@ -187,7 +182,7 @@ const Play: React.FC<Props> = ({
   };
 
   return (
-    <div className="flex flex-col justify-center items-center h-screen text-slate-700 dark:text-slate-300 z-20">
+    <div className="flex flex-col justify-center items-center sm:h-screen text-slate-700 dark:text-slate-300 z-20">
       <div className="grid-container">{renderGrid()}</div>
     </div>
   );

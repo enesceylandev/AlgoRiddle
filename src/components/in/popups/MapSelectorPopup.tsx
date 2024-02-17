@@ -2,19 +2,20 @@ import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faFaceSmile, faStar } from '@fortawesome/free-regular-svg-icons';
-import { faArrowUpRightDots, faCheck, faCrown, faCubes, faDoorClosed, faDoorOpen } from '@fortawesome/free-solid-svg-icons';
+import { faArrowUpRightDots, faCheck, faCrown, faCubes, faDice, faDoorClosed, faDoorOpen } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import CryptoJS from 'crypto-js';
-import { Map } from '../maps';
+import { Map, playground } from '../maps';
 
 type Props = {
   setMapSelectorPopup: React.Dispatch<React.SetStateAction<boolean>>
+  selectedMap: Map
   setSelectedMap: React.Dispatch<React.SetStateAction<Map>>
   dailyMap: Map[]
 }
 
 
-const MapSelectorPopup: React.FC<Props> = ({ setMapSelectorPopup, setSelectedMap, dailyMap }) => {
+const MapSelectorPopup: React.FC<Props> = ({ setMapSelectorPopup, selectedMap, setSelectedMap, dailyMap }) => {
   const [input, setInput] = React.useState<string>(''); // map code
 
   const ChooseMap = (difficulty:string) => {
@@ -82,6 +83,15 @@ const MapSelectorPopup: React.FC<Props> = ({ setMapSelectorPopup, setSelectedMap
       console.log(error)
     }
   };
+  const selectRandomMap = () => {
+    const randomMap = playground[Math.floor(Math.random() * playground.length)];
+    if (randomMap !== selectedMap){
+      setSelectedMap(randomMap);
+      setMapSelectorPopup(false);
+    }else{
+      selectRandomMap();
+    }
+  }
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" onClick={() => setMapSelectorPopup(false)}>
       <div className="relative bg-[#F7F7FC] dark:bg-[#212529] p-4 rounded-xl shadow-md mx-5" onClick={(e) => e.stopPropagation()}>
@@ -94,6 +104,12 @@ const MapSelectorPopup: React.FC<Props> = ({ setMapSelectorPopup, setSelectedMap
           {renderButton('Expert', faStar, 'text-amber-500', 'Expert')}
           {renderButton('Specialist', faCrown, 'text-green-500', 'Specialist')}
         </div>
+        <button
+          onClick={() => selectRandomMap()}
+          className='w-full flex items-center justify-center h-10 bg-[#007FFF] hover:bg-[#0066CC] text-white rounded-md transition-all shadow-md mb-3 dark:shadow-none'>
+          <FontAwesomeIcon icon={faDice} className='mr-2 -ml-2' />
+          <span>Select Mandom Map</span>
+        </button>
 
         <div className='grid grid-cols-4 gap-5'>
           <input

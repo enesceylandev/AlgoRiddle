@@ -15,7 +15,7 @@ type Map = {
   }[]
 }
 const Showcase: React.FC = () => {
-  const gridSize = window.innerWidth <= 768 ? 16 : 18; // VisibleGrid (GridSize+2) ex. gridSize = 18 => 16x16 visible grid
+  const gridSize = 16; // VisibleGrid (GridSize+2) ex. gridSize = 18 => 16x16 visible grid
   const opacityStep = 0.04;
   const [showcaseMaps, setShowcaseMaps] = useState<Map[]>([
   {

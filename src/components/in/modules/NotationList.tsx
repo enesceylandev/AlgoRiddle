@@ -104,7 +104,8 @@ const NotationList: React.FC<Props> = ({
           }
           playerRef.direction = calcTurn(playerRef.direction, playerRef.cords, item);
           setList((prevList) => [...prevList, item]);
-          // console.log(playerRef.cords, playerRef.direction);
+          // setRunLocation(playerRef.cords, playerRef.direction);
+
           if (
             item.includes("f") &&
             !item.includes("forward") &&
@@ -301,6 +302,7 @@ const NotationList: React.FC<Props> = ({
         break;
     }
   };
+
   return (
     <div className="z-20">
       {!dailyMap?.includes(selectedMap) && !preview && (
@@ -381,8 +383,9 @@ const NotationList: React.FC<Props> = ({
                     <div
                       className={`bg-${item.split("-")[0]}-500 w-full h-full rounded-md flex items-center justify-center`}
                     >
-                      {item === "f0" ||  item === "f1" || item === "f2" ? item : null}
-                      {/* {item} */}
+                      {item.includes("-") ? 
+                        item.split("-")[1] === "f0" || item.split("-")[1] === "f1" || item.split("-")[1] === "f2" ? item.split("-")[1] : null 
+                      : item}
                     </div>
                   </div>
                 )}
