@@ -1,6 +1,7 @@
 <p align="center">
-  <img src="https://github.com/MedusaCollins/AlgoRiddle/assets/63819815/2bc08f06-1bbb-4d38-bb8c-8f874a18f633" width="1000px"/> 
+  <img src="https://github.com/MedusaCollins/AlgoRiddle/assets/63819815/8367812b-7623-4073-a8d8-dc336e4389be" width="1000px"/> 
 </p>
+
 
 
 ## Welcome To Algoriddle
