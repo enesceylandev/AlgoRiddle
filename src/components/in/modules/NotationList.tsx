@@ -112,10 +112,6 @@ const NotationList: React.FC<Props> = ({
             !item.includes("left") &&
             checkBlock(playerRef, item)
           ) {
-            // console.log(item)
-            // let test = notation[Number(item.split("f")[1])].slice(index + 1);
-            // notationRef[item.split("f")[1]].push(...test);
-            // console.log(notationRef)
 
             if(notationRef[layer].some((selectedItem:string) => selectedItem.includes("f0" || "f1" || "f2"))){;
               notationRef[item.split("f")[1]].push(...notation[layer].slice(index + 1));
