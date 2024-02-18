@@ -116,9 +116,10 @@ const NotationList: React.FC<Props> = ({
             // let test = notation[Number(item.split("f")[1])].slice(index + 1);
             // notationRef[item.split("f")[1]].push(...test);
             // console.log(notationRef)
-            if(notationRef[layer].some((selectedItem:string) => selectedItem === "f0" || selectedItem === "f1" || selectedItem === "f2")){;
+
+            if(notationRef[layer].some((selectedItem:string) => selectedItem.includes("f0" || "f1" || "f2"))){;
               notationRef[item.split("f")[1]].push(...notation[layer].slice(index + 1));
-              // console.log(item)
+            // console.log(item)
             }
             iterationRef.current += 1;
             

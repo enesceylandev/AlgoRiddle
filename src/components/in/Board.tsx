@@ -42,7 +42,6 @@ const Play: React.FC<Props> = ({
 }) => {
   const gridSize = 16; // VisibleGrid (GridSize+2) ex. gridSize = 18 => 16x16 visible grid
   const opacityStep = 0.04;
-
   useEffect(() => {
     if (requiredRef !== undefined && requiredRef.length > 0) {
       requiredRef.forEach((i) => {
@@ -57,7 +56,7 @@ const Play: React.FC<Props> = ({
         }
         setMapSelectorPopup && setMapSelectorPopup(true);
         
-        console.log("you win!");
+        // console.log("you win!");
         if (dailyMap) {
           let solution: string[] = selectedMap.solution;
           const savedSolutions = localStorage.getItem("solutions");
@@ -74,13 +73,13 @@ const Play: React.FC<Props> = ({
                 "solutions",
                 JSON.stringify(parsedSolutions),
               );
-              console.log("solution saved!");
+              // console.log("solution saved!");
             } else {
-              console.log("solution already exists!");
+              // console.log("solution already exists!");
             }
           } else {
             localStorage.setItem("solutions", JSON.stringify([solution]));
-            console.log("solution saved!");
+            // console.log("solution saved!");
           }
         }
       } else {
@@ -132,7 +131,7 @@ const Play: React.FC<Props> = ({
     );
   };
   const handleBlockClick = (x: number, y: number) => {
-    console.log(x, y);
+    // console.log(x, y);
     if (!preview && setSelectedBlock && selectedBlock) {
       if (isBlockSelected(x, y)) {
         setSelectedBlock(
