@@ -108,7 +108,7 @@ const MapSelectorPopup: React.FC<Props> = ({ setMapSelectorPopup, selectedMap, s
           onClick={() => selectRandomMap()}
           className='w-full flex items-center justify-center h-10 bg-[#007FFF] hover:bg-[#0066CC] text-white rounded-md transition-all shadow-md mb-3 dark:shadow-none'>
           <FontAwesomeIcon icon={faDice} className='mr-2 -ml-2' />
-          <span>Select Mandom Map</span>
+          <span>Select Random Map</span>
         </button>
 
         <div className='grid grid-cols-4 gap-5'>
