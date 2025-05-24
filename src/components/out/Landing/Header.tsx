@@ -13,7 +13,7 @@ const Header: React.FC = () => {
       </h1>
       <p className="sm:text-xl text-md text-slate-600 dark:text-slate-400 z-20">
         <span className="underline font-semibold underline-offset-2 dark:text-slate-300 text-slate-700">
-          AlgoRiddle
+          {process.env.REACT_APP_BRANDNAME}
         </span>{" "}
         is an
         <span className="font-semibold dark:text-slate-300 text-slate-700">
@@ -61,4 +61,3 @@ const Header: React.FC = () => {
 };
 
 export default Header;
-
