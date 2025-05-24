@@ -17,7 +17,7 @@ Our platform is powered by a modern technology stack, making it a seamless and e
 ## Getting Started
 
 ```bash
-git clone https://github.com/MedusaCollins/AlgoRiddle.git
+git clone https://github.com/enesceylandev/AlgoRiddle.git
 cd path/to/algoriddle
 npm i
 mv .env.example .env
